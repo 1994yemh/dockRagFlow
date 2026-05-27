@@ -14,10 +14,14 @@ import java.util.List;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.SystemMessage;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -74,7 +78,7 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .baseUrl(openaiCompatibleUrl)
                 .apiKey(apiKey)
-                .modelName("glm-4-flash@ZHIPU-AI") // RAGFlow 默认通常映射底层模型，此名称兼容性佳
+                .modelName("qwen3-32b@Tongyi-Qianwen") // 采用通义千问默认模型
                 .timeout(Duration.ofSeconds(60))
                 .logRequests(true)
                 .logResponses(true)
@@ -704,7 +708,7 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .baseUrl(openaiCompatibleUrl)
                 .apiKey(apiKey)
-                .modelName("glm-4-flash@ZHIPU-AI")
+                .modelName("qwen3-32b@Tongyi-Qianwen")
                 .timeout(Duration.ofSeconds(60))
                 .logRequests(true)
                 .logResponses(true)
@@ -737,6 +741,101 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
         respVO.setChatId(reqVO.getChatId());
 
         return respVO;
+    }
+
+    @Override
+    public SseEmitter sendChatFlow(RagFlowChatWithHistoryReqVO reqVO) {
+        if (reqVO == null) {
+            throw new ServiceException("请求体不能为空");
+        }
+        if (StrUtil.isBlank(reqVO.getChatId())) {
+            throw new ServiceException("聊天助手 ID 不能为空");
+        }
+        if (reqVO.getMessages() == null || reqVO.getMessages().isEmpty()) {
+            throw new ServiceException("对话消息历史不能为空");
+        }
+
+        if (StrUtil.isBlank(apiKey) || "your-api-key-here".equals(apiKey)) {
+            throw new ServiceException("RAGFlow API Key 未正确配置");
+        }
+
+        String openaiCompatibleUrl = String.format("%s/api/v1/openai/%s", 
+                StrUtil.removeSuffix(baseUrl, "/"), reqVO.getChatId());
+
+        // 1. 构建 langchain4j 流式模型实例，对接通义千问 Qwen3 默认大模型
+        StreamingChatLanguageModel streamingModel = OpenAiStreamingChatModel.builder()
+                .baseUrl(openaiCompatibleUrl)
+                .apiKey(apiKey)
+                .modelName("qwen3-32b@Tongyi-Qianwen")
+                .timeout(Duration.ofSeconds(60))
+                .logRequests(true)
+                .logResponses(true)
+                .build();
+
+        // 2. 创建 Spring 内置流式发射器，指定 120 秒超时时间
+        SseEmitter emitter = new SseEmitter(120000L);
+
+        // 3. 构建多轮对话的 langchain4j 消息链
+        List<ChatMessage> langchainMessages = new java.util.ArrayList<>();
+        for (RagFlowSessionRespVO.MessageVO msg : reqVO.getMessages()) {
+            if ("user".equalsIgnoreCase(msg.getRole())) {
+                langchainMessages.add(UserMessage.from(msg.getContent()));
+            } else if ("assistant".equalsIgnoreCase(msg.getRole())) {
+                langchainMessages.add(AiMessage.from(msg.getContent()));
+            } else if ("system".equalsIgnoreCase(msg.getRole())) {
+                langchainMessages.add(SystemMessage.from(msg.getContent()));
+            }
+        }
+
+        // 4. 异步监听并推送大模型 Token 字符流
+        try {
+            streamingModel.chat(langchainMessages, new StreamingChatResponseHandler() {
+                @Override
+                public void onPartialResponse(String partialResponse) {
+                    try {
+                        // 在控制台实时逐字冲刷输出，方便后端瞬间感知流式生成节奏
+                        System.out.print(partialResponse);
+                        System.out.flush();
+
+                        // 将 Token (partialResponse) 封装进 Map 并序列化为标准 JSON 字符串
+                        // Jackson 序列化会自动对换行符 \n、回车符 \r 以及 Markdown 特殊符号进行转义，确保物理传输高保真
+                        java.util.Map<String, String> dataMap = new java.util.HashMap<>();
+                        dataMap.put("text", partialResponse);
+                        String json = objectMapper.writeValueAsString(dataMap);
+
+                        // 通过 SSE 协议通道发射给前端
+                        emitter.send(SseEmitter.event().data(json));
+                    } catch (Exception e) {
+                        // 捕获并静默处理诸如前端断开连接等网络异端
+                    }
+                }
+
+                @Override
+                public void onCompleteResponse(ChatResponse response) {
+                    try {
+                        System.out.println("\n[RAGFlow 流式对话生成完成]");
+                        emitter.complete();
+                    } catch (Exception e) {
+                        // 静默关闭通道
+                    }
+                }
+
+                @Override
+                public void onError(Throwable error) {
+                    try {
+                        System.err.println("\n[RAGFlow 流式对话生成异常]: " + error.getMessage());
+                        emitter.completeWithError(error);
+                    } catch (Exception e) {
+                        // 静默关闭通道
+                    }
+                }
+            });
+        } catch (Exception e) {
+            emitter.completeWithError(e);
+            throw new ServiceException("启动流式对话失败：%s", e.getMessage());
+        }
+
+        return emitter;
     }
 }
 

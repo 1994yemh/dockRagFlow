@@ -1,5 +1,7 @@
 package com.ruinet.ragflow.pojo.vo;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +17,7 @@ import java.util.List;
  * @author 中锐网络
  */
 @Data
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "RAGFlow 聊天助手带历史记忆的多轮对话请求参数")
 public class RagFlowChatWithHistoryReqVO implements Serializable {
 

@@ -122,3 +122,30 @@ graph TD
   "chat_id": "2ca4b22e878011ef88fe0242ac120005"
 }
 ```
+
+### 3.4 极致打字机特效的流式追问接口
+* **HTTP 请求**：`POST http://localhost:8080/api/v1/ragflow-chat/send-chat-flow`
+* **Headers**：`Content-Type: application/json`
+* **JSON 入参**（同上，支持传递完整的追问记忆历史）：
+```json
+{
+  "chat_id": "2ca4b22e878011ef88fe0242ac120005",
+  "messages": [
+    { "role": "user", "content": "AMD 显卡驱动怎么装？" }
+  ]
+}
+```
+* **SSE 字符流式出参（Server-Sent Events 字节流）**：
+  服务端将以标准的 `data:token` 形式逐字源源不断地下发数据流，例如：
+```
+data:如
+data:果
+data:是
+data: A
+data:MD
+data: 显
+data:卡
+...
+```
+  前端通过流式 UTF-8 解码器接收并拼装，彻底解决了大分辨率扫描图与长文本检索下等待干提的问题，带给用户毫秒级的超凡反应体验！
+

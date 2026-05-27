@@ -114,6 +114,14 @@ public interface RagFlowChatService {
      * @return 对话回复结果
      */
     RagFlowChatRespVO sendChatWithHistory(RagFlowChatWithHistoryReqVO reqVO);
+
+    /**
+     * 流式发送带有历史记忆的多轮提问对话，基于 SSE 逐字吐出大模型回答。
+     *
+     * @param reqVO 多轮对话请求参数
+     * @return Spring SSE 发射器
+     */
+    org.springframework.web.servlet.mvc.method.annotation.SseEmitter sendChatFlow(RagFlowChatWithHistoryReqVO reqVO);
 }
 
 

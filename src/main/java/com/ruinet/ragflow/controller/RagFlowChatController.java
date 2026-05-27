@@ -185,5 +185,30 @@ public class RagFlowChatController {
     public RagFlowChatRespVO sendChatWithHistory(@Valid @RequestBody RagFlowChatWithHistoryReqVO reqVO) {
         return ragFlowChatService.sendChatWithHistory(reqVO);
     }
+
+    /**
+     * 流式多轮追问对话端点，通过 Server-Sent Events (SSE) 协议逐字返回大模型回答。
+     * 遵循规约：REST API 路径与方法名完全匹配（方法：sendChatFlow，路径：send-chat-flow），且控制器内无业务逻辑。
+     *
+     * @param reqVO    多轮对话请求参数
+     * @param response 响应对象，用于动态拦截并强灌禁用响应缓冲和缓存的 Headers，保卫极致流式吐字
+     * @return SSE 流发射器
+     */
+    @PostMapping(value = "/send-chat-flow", produces = org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Operation(summary = "流式多轮追问对话", description = "利用 Server-Sent Events 流式通道，实时逐字下发大模型有检索记忆的回答")
+    public org.springframework.web.servlet.mvc.method.annotation.SseEmitter sendChatFlow(
+            @Valid @RequestBody RagFlowChatWithHistoryReqVO reqVO,
+            jakarta.servlet.http.HttpServletResponse response) {
+        
+        // 1. 强力且深度地禁用反向代理（如 Nginx）以及 CDN/网关的 Response Buffering 响应积压行为
+        response.setHeader("X-Accel-Buffering", "no");
+        
+        // 2. 注入全面无死角的清除缓存 Headers，确保流通道的高实时畅通
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+        
+        return ragFlowChatService.sendChatFlow(reqVO);
+    }
 }
 
