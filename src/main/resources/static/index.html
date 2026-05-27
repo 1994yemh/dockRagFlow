@@ -30,173 +30,8 @@
             }
         }
     </script>
-    <style>
-        body {
-            background: radial-gradient(circle at 50% 50%, #11131c 0%, #08090d 100%);
-            color: #e2e8f0;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Glassmorphism Effect */
-        .glass-card {
-            background: rgba(22, 28, 45, 0.45);
-            backdrop-filter: blur(16px) saturate(120%);
-            -webkit-backdrop-filter: blur(16px) saturate(120%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .glass-card-interactive {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .glass-card-interactive:hover {
-            transform: translateY(-4px);
-            background: rgba(22, 28, 45, 0.65);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.3);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.25);
-            border-radius: 9999px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.5);
-        }
-
-        /* ========================================== */
-        /*   💎 极致奢华 Markdown & 代码块排版美学 💎  */
-        /* ========================================== */
-        .markdown-body {
-            line-height: 1.6;
-            font-size: 0.875rem;
-            color: #cbd5e1;
-        }
-
-        .markdown-body h1,
-        .markdown-body h2,
-        .markdown-body h3,
-        .markdown-body h4 {
-            font-weight: 700;
-            color: #f8fafc;
-            margin-top: 1.2rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .markdown-body h1 {
-            font-size: 1.3rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 0.3rem;
-        }
-
-        .markdown-body h2 {
-            font-size: 1.18rem;
-        }
-
-        .markdown-body h3 {
-            font-size: 1.08rem;
-        }
-
-        .markdown-body p {
-            margin-bottom: 0.8rem;
-        }
-
-        .markdown-body ul,
-        .markdown-body ol {
-            margin-bottom: 0.8rem;
-            padding-left: 1.3rem;
-        }
-
-        .markdown-body ul {
-            list-style-type: disc;
-        }
-
-        .markdown-body ol {
-            list-style-type: decimal;
-        }
-
-        .markdown-body li {
-            margin-bottom: 0.3rem;
-        }
-
-        .markdown-body blockquote {
-            border-left: 4px solid #6366f1;
-            padding-left: 1rem;
-            color: #94a3b8;
-            background: rgba(99, 102, 241, 0.04);
-            margin: 0.8rem 0;
-            border-radius: 0 8px 8px 0;
-            padding-top: 0.3rem;
-            padding-bottom: 0.3rem;
-        }
-
-        /* 尊贵深空色表格 Table */
-        .markdown-body table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.2rem 0;
-            font-size: 0.8rem;
-        }
-
-        .markdown-body th,
-        .markdown-body td {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 0.6rem 0.8rem;
-            text-align: left;
-        }
-
-        .markdown-body th {
-            background-color: rgba(22, 28, 45, 0.95);
-            color: #f1f5f9;
-            font-weight: 600;
-        }
-
-        .markdown-body tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
-        /* Highlight.js 代码高亮盒子深度美化 */
-        .markdown-body pre {
-            background: #090b10 !important;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 0.8rem 0;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        .markdown-body code {
-            font-family: 'Fira Code', 'mono', monospace;
-            background: rgba(99, 102, 241, 0.12);
-            color: #ff6b8b;
-            padding: 0.18rem 0.38rem;
-            border-radius: 6px;
-            font-size: 0.85em;
-        }
-
-        .markdown-body pre code {
-            background: none !important;
-            color: #f1f5f9;
-            padding: 0;
-            border-radius: 0;
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-    </style>
+    <!-- 引入提取出的模块化控制台样式 -->
+    <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body class="p-4 md:p-8 font-sans">
@@ -722,22 +557,13 @@
                                     class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                         </path>
                                     </svg>
-                                    配置编辑
-                                </button>
-                                <button @click="switchToSessionTab(item)"
-                                    class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                        </path>
-                                    </svg>
-                                    会话管理/调试
+                                    编辑
                                 </button>
                                 <button @click="deleteAssistant(item.id)"
-                                    class="text-xs font-semibold text-rose-500 hover:text-rose-400 transition-colors flex items-center gap-1 ml-auto">
+                                    class="text-xs font-semibold text-rose-500 hover:text-rose-400 transition-colors flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -745,56 +571,70 @@
                                     </svg>
                                     删除
                                 </button>
+                                <button @click="switchToSessionTab(item)"
+                                    class="ml-auto px-2.5 py-1 text-[11px] font-bold text-emerald-400 hover:bg-emerald-500/10 border border-emerald-500/25 rounded-md flex items-center gap-1 transition-all">
+                                    调试沙盒
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-
-                        <!-- Empty State -->
-                        <div v-if="filteredList.length === 0" class="text-center py-8 text-slate-500 text-xs italic">
-                            没有发现符合条件的聊天助手数据
+                        <div v-if="list.length === 0" class="text-center py-12 text-slate-500 text-xs italic">
+                            暂无自定义聊天助手，您可以在左侧面板定制新建...
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 2: Conversation and Session Management (Independent Page Tab) -->
+        <!-- TAB 2: Conversation & Sessions Sandboxes Controls -->
         <div v-show="activeTab === 'session'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-            <!-- Left panel: Selected Assistant Context & Session CRUD (4 Cols) -->
-            <div class="lg:col-span-4 flex flex-col gap-5">
+            <!-- Left panel: Session list for specific Chat (4 Cols) -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
 
-                <!-- Assistant context card -->
-                <div class="glass-card p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-xl -z-10"></div>
-                    <span class="text-[9px] font-semibold text-slate-500 uppercase tracking-widest block">当前关联助手</span>
+                <!-- Selected Assistant Info Box -->
+                <div class="glass-card p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -z-10"></div>
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-1.5">
+                            当前调试的目标助理
+                        </h2>
+                        <button @click="activeTab = 'assistant'"
+                            class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-0.5">
+                            切换助手
+                        </button>
+                    </div>
 
                     <div v-if="activeSandboxChat" class="flex items-center gap-3">
                         <div
-                            class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/35 flex items-center justify-center font-bold text-indigo-400 overflow-hidden flex-shrink-0">
+                            class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400 text-lg uppercase overflow-hidden flex-shrink-0">
                             <img v-if="activeSandboxChat.icon" :src="activeSandboxChat.icon"
                                 class="w-full h-full object-cover">
                             <span v-else>{{ activeSandboxChat.name.substring(0, 1) }}</span>
                         </div>
-                        <div>
-                            <h3 class="font-bold text-sm text-slate-100">{{ activeSandboxChat.name }}</h3>
-                            <p class="text-[10px] text-slate-400 font-mono truncate max-w-[180px] mt-0.5"
-                                :title="activeSandboxChat.id">ID: {{ activeSandboxChat.id }}</p>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="font-bold text-sm text-slate-100 truncate">{{ activeSandboxChat.name }}</h3>
+                            <p class="text-[10px] text-indigo-400 font-mono tracking-tight mt-0.5 truncate">{{
+                                activeSandboxChat.llm_id.split('@')[0] }}</p>
                         </div>
                     </div>
-                    <div v-else class="text-xs text-amber-400/90 py-2 italic">
-                        您当前尚未选择任何聊天助手。请先到 “聊天助手管理” 页或下方列表中选中一个以开启会话控制。
+                    <div v-else class="text-slate-500 text-xs italic text-center py-2">
+                        暂未选择目标助理，请先去 [聊天助手管理] 列表卡片上点击“调试沙盒”切入
                     </div>
                 </div>
 
-                <!-- Session CRUD Panel -->
-                <div v-if="activeSandboxChat" class="glass-card p-5 rounded-2xl flex flex-col gap-4 max-h-[480px]">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            会话列表 (Sessions)
-                        </h3>
+                <!-- Session list of specific Chat -->
+                <div v-if="activeSandboxChat"
+                    class="glass-card p-6 rounded-2xl flex flex-col gap-4 max-h-[420px] overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-shrink-0">
+                        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2">
+                            历史会话列表
+                        </h2>
                         <button @click="createNewSession"
-                            class="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1">
+                            class="px-2.5 py-1 text-[10px] bg-indigo-600/90 hover:bg-indigo-500 rounded text-white font-bold transition-colors flex items-center gap-0.5">
                             + 新建会话
                         </button>
                     </div>
@@ -849,11 +689,17 @@
                 <!-- Chat message boxes -->
                 <div ref="chatBox"
                     class="flex flex-col gap-4 flex-1 overflow-y-auto bg-slate-950/40 p-4 rounded-xl border border-slate-900 text-xs">
+                    
                     <!-- Standard Greeting -->
-                    <div v-if="activeSandboxChat" class="flex flex-col gap-1 items-start max-w-[85%]">
-                        <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">智能助手</span>
-                        <div
-                            class="bg-indigo-950/30 border border-indigo-900/40 p-3 rounded-2xl rounded-tl-none text-slate-200 leading-relaxed w-full">
+                    <div v-if="activeSandboxChat" class="flex items-start gap-3 max-w-[85%]">
+                        <!-- 智能助理头像 (默认图标) -->
+                        <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+                            <!-- 默认助理机器人 SVG -->
+                            <svg class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                            </svg>
+                        </div>
+                        <div class="bg-indigo-950/30 border border-indigo-900/40 p-3 rounded-2xl rounded-tl-none text-slate-200 leading-relaxed flex-1">
                             <!-- 允许智能开场白支持高保真 Markdown 渲染 -->
                             <div class="markdown-body"
                                 v-html="renderMarkdown(activeSandboxChat.prompt_config ? activeSandboxChat.prompt_config.prologue : '您好！我是您的智能搜索助理。')">
@@ -862,12 +708,24 @@
                     </div>
 
                     <!-- Loop Messages -->
-                    <div v-for="(msg, index) in chatMessages" :key="index" class="flex flex-col gap-1 max-w-[85%]"
-                        :class="msg.role === 'user' ? 'items-end ml-auto' : 'items-start'">
-                        <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
-                            {{ msg.role === 'user' ? '您' : '智能助手' }}
-                        </span>
-                        <div class="p-3 rounded-2xl text-slate-200 border leading-relaxed w-full"
+                    <div v-for="(msg, index) in chatMessages" :key="index" class="flex items-start gap-3 max-w-[85%]"
+                        :class="msg.role === 'user' ? 'ml-auto flex-row-reverse' : ''">
+                        <!-- 头像渲染 -->
+                        <!-- 用户消息使用该聊天助理的图标 -->
+                        <div v-if="msg.role === 'user'" class="w-8 h-8 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center flex-shrink-0 overflow-hidden text-indigo-400 font-bold">
+                            <img v-if="activeSandboxChat && activeSandboxChat.icon" :src="activeSandboxChat.icon" class="w-full h-full object-cover">
+                            <span v-else-if="activeSandboxChat">{{ activeSandboxChat.name.substring(0, 1) }}</span>
+                            <span v-else>U</span>
+                        </div>
+                        <!-- 助手消息使用默认机器人图标 -->
+                        <div v-else class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                            </svg>
+                        </div>
+
+                        <!-- 消息气泡 -->
+                        <div class="p-3 rounded-2xl text-slate-200 border leading-relaxed flex-1 animate-fadeIn"
                             :class="msg.role === 'user' ? 'bg-indigo-600 border-indigo-500 rounded-tr-none' : 'bg-slate-900/60 border-slate-800 rounded-tl-none'">
                             <!-- 用户消息直接保留换行纯文本即可，助手消息则挂载 Markdown 豪华渲染器 -->
                             <p v-if="msg.role === 'user'" class="whitespace-pre-wrap">{{ msg.content }}</p>
@@ -876,10 +734,15 @@
                     </div>
 
                     <!-- Loader message -->
-                    <div v-if="chatTyping" class="flex flex-col gap-1 items-start max-w-[85%]">
-                        <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">智能助手</span>
+                    <div v-if="chatTyping" class="flex items-start gap-3 max-w-[85%]">
+                        <!-- 助理默认头像 -->
+                        <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                            </svg>
+                        </div>
                         <div
-                            class="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-400 italic flex items-center gap-2">
+                            class="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-400 italic flex items-center gap-2 flex-1">
                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></span>
                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-300"></span>
@@ -915,7 +778,7 @@
         <!-- Debug Logs Monitor (Bottom) -->
         <section class="glass-card p-5 rounded-2xl mt-4">
             <h2 class="text-sm font-bold border-b border-slate-800 pb-2 mb-3 text-slate-300 flex items-center gap-2">
-                <span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
                 实时 JSON 数据包调试日志 (Hacker Style Console)
             </h2>
             <div
@@ -952,749 +815,12 @@
     </div>
 
     <!-- Script Application -->
-    <script>
-        const { createApp, ref, computed, watch, nextTick } = Vue;
-
-        createApp({
-            setup() {
-                // Navigation Active Tab
-                const activeTab = ref('assistant');
-
-                // Section Toggles
-                const sections = ref({
-                    llm: true,
-                    prompt: false,
-                    retrieval: false
-                });
-
-                const toggleSection = (sec) => {
-                    sections.value[sec] = !sections.value[sec];
-                };
-
-                // UI Lists
-                const list = ref([]);
-                const datasetList = ref([]); // Database dataset arrays
-                const filterKeywords = ref('');
-                const logs = ref([]);
-
-                // Forms Default Template
-                const createDefaultForm = () => ({
-                    name: '',
-                    icon: '',
-                    description: 'API 完整参数创建 Chat，用于验证 Web 端是否可编辑保存',
-                    prompt_type: 'simple',
-                    do_refer: '1',
-                    dataset_ids: [],
-                    llm_id: 'qwen3-32b@Tongyi-Qianwen',
-                    llm_setting: {
-                        model_type: 'chat',
-                        temperature: 0.1,
-                        top_p: 0.3,
-                        presence_penalty: 0.4,
-                        frequency_penalty: 0.7
-                    },
-                    prompt_config: {
-                        system: '你是一个专业且严谨的智能搜索助手。请根据提供的知识库内容，对用户的问题进行深刻的理解与条理清晰的归纳总结。回答应结构分明、专业精炼，避免直接照搬大段未处理的原始文本。如果知识库中存在相关内容，请用您自己的话配合 Markdown 格式排版进行解答。当所有知识库内容都与问题无关时，你的回答必须包括"知识库中未找到您要的答案！"这句话。回答需要考虑聊天历史。\n以下是知识库：\n{knowledge}\n以上是知识库。',
-                        prologue: '您好！我是您的智能搜索助理。',
-                        empty_response: '知识库中未找到您要的答案！',
-                        quote: true,
-                        keyword: false,
-                        tts: false,
-                        refine_multiturn: false,
-                        use_kg: false,
-                        reasoning: false,
-                        cross_languages: [],
-                        tavily_api_key: '',
-                        toc_enhance: false,
-                        parameters: []
-                    },
-                    similarity_threshold: 0.2,
-                    vector_similarity_weight: 0.3,
-                    top_n: 8,
-                    top_k: 1024,
-                    rerank_id: 'qwen3-rerank@Tongyi-Qianwen'
-                });
-
-                const form = ref(createDefaultForm());
-                const isEditMode = ref(false);
-                const editId = ref('');
-
-                // Custom Computed Mappings
-                const crossLanguagesText = computed({
-                    get: () => form.value.prompt_config.cross_languages ? form.value.prompt_config.cross_languages.join(', ') : '',
-                    set: (val) => {
-                        form.value.prompt_config.cross_languages = val.split(/[,\n]/)
-                            .map(s => s.trim())
-                            .filter(s => s.length > 0);
-                    }
-                });
-
-                // Checkbox Cards click mappings for dataset multiple selection
-                const toggleDataset = (dbId) => {
-                    const idx = form.value.dataset_ids.indexOf(dbId);
-                    if (idx > -1) {
-                        form.value.dataset_ids.splice(idx, 1);
-                    } else {
-                        form.value.dataset_ids.push(dbId);
-                    }
-                };
-
-                // Filter Computed
-                const filteredList = computed(() => {
-                    if (!filterKeywords.value.trim()) return list.value;
-                    const kw = filterKeywords.value.toLowerCase();
-                    return list.value.filter(item =>
-                        item.name.toLowerCase().includes(kw) ||
-                        item.id.toLowerCase().includes(kw)
-                    );
-                });
-
-                // Logging Util
-                const addLog = (type, action, req, resp) => {
-                    const time = new Date().toLocaleTimeString();
-                    logs.value.unshift({ time, type, action, req, resp });
-                    if (logs.value.length > 10) logs.value.pop();
-                };
-
-                // Add / Remove parameters dynamically
-                const addParameter = () => {
-                    if (!form.value.prompt_config.parameters) {
-                        form.value.prompt_config.parameters = [];
-                    }
-                    form.value.prompt_config.parameters.push({ key: '', optional: false });
-                };
-
-                const removeParameter = (idx) => {
-                    form.value.prompt_config.parameters.splice(idx, 1);
-                };
-
-                // Image Local upload to Base64 encode (Auto Center Crop & Compress & Resize via HTML5 Canvas)
-                const uploadAvatar = (event) => {
-                    const file = event.target.files[0];
-                    if (!file) return;
-                    if (!file.type.startsWith('image/')) {
-                        alert('请确保选择的文件是图片！');
-                        return;
-                    }
-
-                    // 限制最大图片体积为 20MB（防止超大图像消耗过多内存）
-                    if (file.size > 20 * 1024 * 1024) {
-                        alert('选择的图片文件过大，请选择 20MB 以内的图片！');
-                        return;
-                    }
-
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            // 1. 创建隐藏的内存 Canvas 画板，设定黄金头像分辨率 (200x200)
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            canvas.width = 200;
-                            canvas.height = 200;
-
-                            // 2. 高阶居中正方形裁剪算法 (Center Crop Calculation)
-                            let sx = 0;
-                            let sy = 0;
-                            let sWidth = img.width;
-                            let sHeight = img.height;
-
-                            if (img.width > img.height) {
-                                // 宽大于高：以高度为正方形边长，左右居中裁剪
-                                sWidth = img.height;
-                                sx = (img.width - img.height) / 2;
-                            } else if (img.height > img.width) {
-                                // 高大于宽：以宽度为正方形边长，上下居中裁剪
-                                sHeight = img.width;
-                                sy = (img.height - img.width) / 2;
-                            }
-
-                            // 3. 在 Canvas 上进行高保真缩放绘制
-                            ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, 200, 200);
-
-                            // 4. 以 0.8 的高质量压缩转换为小巧保真的 JPEG Base64 编码
-                            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-                            form.value.icon = compressedBase64;
-                            addLog('SUCCESS', '图片自动居中裁剪压缩成功', {
-                                original_size: (file.size / 1024).toFixed(1) + ' KB',
-                                compressed_size: (compressedBase64.length / 1024).toFixed(1) + ' KB'
-                            }, {});
-                        };
-                        img.onerror = () => {
-                            alert('图片文件解析失败！');
-                        };
-                        img.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                };
-
-                // AJAX Operations
-                const fetchList = async () => {
-                    try {
-                        const res = await fetch('/api/v1/ragflow-chat/list-chat-assistants');
-                        const data = await res.json();
-                        list.value = Array.isArray(data) ? data : [];
-                    } catch (e) {
-                        console.error('获取聊天助手列表失败', e);
-                        addLog('ERROR', 'GET /list-chat-assistants (加载助理列表)', {}, { error: e.message });
-                    }
-                };
-
-                const fetchDatasets = async () => {
-                    try {
-                        const res = await fetch('/api/v1/ragflow-chat/list-datasets');
-                        const data = await res.json();
-                        datasetList.value = Array.isArray(data) ? data : [];
-                        addLog('SUCCESS', 'GET /list-datasets (加载系统知识库列表)', {}, data);
-                    } catch (e) {
-                        console.error('获取知识库列表失败', e);
-                        addLog('ERROR', 'GET /list-datasets (加载系统知识库失败)', {}, { error: e.message });
-                    }
-                };
-
-                const resetForm = () => {
-                    form.value = createDefaultForm();
-                    isEditMode.value = false;
-                    editId.value = '';
-                };
-
-                const saveAssistant = async () => {
-                    const actionName = isEditMode.value ? '更新聊天助手' : '创建聊天助手';
-                    const url = isEditMode.value
-                        ? '/api/v1/ragflow-chat/update-chat-assistant'
-                        : '/api/v1/ragflow-chat/create-chat-assistant';
-
-                    const payload = { ...form.value };
-                    if (isEditMode.value) {
-                        payload.id = editId.value;
-                    }
-
-                    try {
-                        const res = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        const responseData = await res.json();
-
-                        if (res.ok && (!responseData.code || responseData.code === 0)) {
-                            addLog('SUCCESS', `POST ${url} (${actionName})`, payload, responseData);
-                            alert(`${actionName}成功！`);
-                            resetForm();
-                            fetchList();
-                        } else {
-                            addLog('ERROR', `POST ${url} (${actionName})`, payload, responseData);
-                            alert(`操作失败: ${responseData.message || '未知错误'}`);
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `POST ${url} (${actionName})`, payload, { error: e.message });
-                        alert(`发送请求异常: ${e.message}`);
-                    }
-                };
-
-                const loadToEdit = (item) => {
-                    const itemCopy = JSON.parse(JSON.stringify(item));
-
-                    if (!itemCopy.llm_setting) itemCopy.llm_setting = {};
-                    if (!itemCopy.prompt_config) itemCopy.prompt_config = {};
-                    if (!itemCopy.prompt_config.parameters) itemCopy.prompt_config.parameters = [];
-
-                    form.value = {
-                        name: itemCopy.name || '',
-                        icon: itemCopy.icon || '',
-                        description: itemCopy.description || '',
-                        prompt_type: itemCopy.prompt_type || 'simple',
-                        do_refer: itemCopy.do_refer || '1',
-                        dataset_ids: itemCopy.dataset_ids || [],
-                        llm_id: itemCopy.llm_id || 'qwen3-32b@Tongyi-Qianwen',
-                        llm_setting: {
-                            model_type: itemCopy.llm_setting.model_type || 'chat',
-                            temperature: itemCopy.llm_setting.temperature ?? 0.1,
-                            top_p: itemCopy.llm_setting.top_p ?? 0.3,
-                            presence_penalty: itemCopy.llm_setting.presence_penalty ?? 0.4,
-                            frequency_penalty: itemCopy.llm_setting.frequency_penalty ?? 0.7
-                        },
-                        prompt_config: {
-                            system: itemCopy.prompt_config.system || '',
-                            prologue: itemCopy.prompt_config.prologue || '',
-                            empty_response: itemCopy.prompt_config.empty_response || '',
-                            quote: itemCopy.prompt_config.quote ?? true,
-                            keyword: itemCopy.prompt_config.keyword ?? false,
-                            tts: itemCopy.prompt_config.tts ?? false,
-                            refine_multiturn: itemCopy.prompt_config.refine_multiturn ?? false,
-                            use_kg: itemCopy.prompt_config.use_kg ?? false,
-                            reasoning: itemCopy.prompt_config.reasoning ?? false,
-                            cross_languages: itemCopy.prompt_config.cross_languages || [],
-                            tavily_api_key: itemCopy.prompt_config.tavily_api_key || '',
-                            toc_enhance: itemCopy.prompt_config.toc_enhance ?? false,
-                            parameters: itemCopy.prompt_config.parameters || []
-                        },
-                        similarity_threshold: itemCopy.similarity_threshold ?? 0.2,
-                        vector_similarity_weight: itemCopy.vector_similarity_weight ?? 0.3,
-                        top_n: itemCopy.top_n ?? 8,
-                        top_k: itemCopy.top_k ?? 1024,
-                        rerank_id: itemCopy.rerank_id || 'qwen3-rerank@Tongyi-Qianwen'
-                    };
-
-                    isEditMode.value = true;
-                    editId.value = itemCopy.id;
-
-                    sections.value.llm = true;
-                    sections.value.prompt = true;
-                    sections.value.retrieval = true;
-
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                };
-
-                const deleteAssistant = async (id) => {
-                    if (!confirm('您确定要彻底删除该聊天助手吗？此操作无法撤销。')) return;
-
-                    const url = `/api/v1/ragflow-chat/delete-chat-assistant/${id}`;
-                    try {
-                        const res = await fetch(url, { method: 'DELETE' });
-                        const data = await res.json();
-
-                        if (res.ok) {
-                            addLog('SUCCESS', `DELETE ${url} (删除聊天助手)`, { id }, data);
-                            alert('删除成功！');
-                            if (activeSandboxChat.value && activeSandboxChat.value.id === id) {
-                                activeSandboxChat.value = null;
-                                activeSessionId.value = '';
-                                sessionList.value = [];
-                            }
-                            fetchList();
-                        } else {
-                            addLog('ERROR', `DELETE ${url} (删除聊天助手)`, { id }, data);
-                            alert(`删除失败: ${data.message || '未知错误'}`);
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `DELETE ${url} (删除聊天助手)`, { id }, { error: e.message });
-                        alert(`删除异常: ${e.message}`);
-                    }
-                };
-
-                // --- TAB 2: Conversation & Sessions Sandboxes Controls ---
-                const activeSandboxChat = ref(null);
-                const activeSessionId = ref('');
-                const sessionList = ref([]); // Sessions array for selected assistant
-                const chatMessages = ref([]);
-                const userInput = ref('');
-                const chatTyping = ref(false);
-                const chatBox = ref(null);
-
-                // Switch Tab to Session panel directly
-                const switchToSessionTab = (item) => {
-                    activeSandboxChat.value = item;
-                    activeTab.value = 'session';
-                    loadSessions(item.id);
-                };
-
-                // Load sessions of selected chat assistant
-                const loadSessions = async (chatId) => {
-                    const url = `/api/v1/ragflow-chat/list-sessions/${chatId}`;
-                    try {
-                        const res = await fetch(url);
-                        const data = await res.json();
-                        if (res.ok) {
-                            sessionList.value = data || [];
-                            addLog('SUCCESS', `GET ${url} (获取会话列表)`, { chatId }, data);
-                            if (sessionList.value.length > 0) {
-                                selectSession(sessionList.value[0].id);
-                            } else {
-                                activeSessionId.value = '';
-                                chatMessages.value = [];
-                            }
-                        } else {
-                            addLog('ERROR', `GET ${url} (获取会话列表)`, { chatId }, data);
-                            alert('获取会话列表失败：' + (data.message || '未知错误'));
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `GET ${url} (获取会话列表异常)`, { chatId }, { error: e.message });
-                    }
-                };
-
-                // Create a new session
-                const createNewSession = async () => {
-                    if (!activeSandboxChat.value) return;
-                    const chatId = activeSandboxChat.value.id;
-                    const sName = prompt('请输入新会话的名称：', `会话 ${sessionList.value.length + 1}`);
-                    if (!sName || !sName.trim()) return;
-
-                    const url = `/api/v1/ragflow-chat/create-session/${chatId}`;
-                    const payload = { name: sName.trim() };
-                    try {
-                        const res = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        const data = await res.json();
-                        if (res.ok && data.id) {
-                            addLog('SUCCESS', `POST ${url} (新建会话)`, payload, data);
-                            sessionList.value.push(data);
-                            selectSession(data.id);
-                        } else {
-                            addLog('ERROR', `POST ${url} (新建会话失败)`, payload, data);
-                            alert('创建会话失败：' + (data.message || '未知错误'));
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `POST ${url} (新建会话异常)`, payload, { error: e.message });
-                    }
-                };
-
-                // Select a session to load conversation
-                const selectSession = async (sesId) => {
-                    // 主动打断并清理上轮未输出完的打字机，防止多会话数据污染
-                    isStreaming = false;
-                    chatTyping.value = false;
-                    charQueue = [];
-                    if (typingInterval) {
-                        clearInterval(typingInterval);
-                        typingInterval = null;
-                    }
-
-                    activeSessionId.value = sesId;
-                    if (!activeSandboxChat.value || !sesId) return;
-                    const chatId = activeSandboxChat.value.id;
-                    const url = `/api/v1/ragflow-chat/get-session/${chatId}/${sesId}`;
-                    try {
-                        const res = await fetch(url);
-                        const data = await res.json();
-                        if (res.ok && data) {
-                            // 排除系统开场白（如果存在），在前端直接循环渲染历史
-                            let list = data.messages || [];
-                            if (list.length > 0 && list[0].role === 'assistant') {
-                                list = list.slice(1);
-                            }
-                            chatMessages.value = list;
-                            addLog('SUCCESS', `GET ${url} (获取会话详情)`, { chatId, sesId }, data);
-                            scrollToBottom();
-                        } else {
-                            addLog('ERROR', `GET ${url} (获取会话详情失败)`, { chatId, sesId }, data);
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `GET ${url} (获取会话详情异常)`, { chatId, sesId }, { error: e.message });
-                    }
-                };
-
-                // Rename a session
-                const renameSession = async (ses) => {
-                    if (!activeSandboxChat.value) return;
-                    const chatId = activeSandboxChat.value.id;
-                    const newName = prompt('请输入新的会话名称：', ses.name);
-                    if (!newName || !newName.trim()) return;
-
-                    const url = `/api/v1/ragflow-chat/update-session/${chatId}/${ses.id}`;
-                    const payload = { name: newName.trim() };
-                    try {
-                        const res = await fetch(url, {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        const data = await res.json();
-                        if (res.ok) {
-                            addLog('SUCCESS', `PATCH ${url} (重命名会话)`, payload, data);
-                            ses.name = data.name;
-                        } else {
-                            addLog('ERROR', `PATCH ${url} (重命名会话失败)`, payload, data);
-                            alert('重命名失败：' + (data.message || '未知错误'));
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `PATCH ${url} (重命名会话异常)`, payload, { error: e.message });
-                    }
-                };
-
-                // Delete a session
-                const deleteSession = async (sesId) => {
-                    if (!confirm('您确定要删除该会话吗？历史消息记录将会清空。')) return;
-                    if (!activeSandboxChat.value) return;
-                    const chatId = activeSandboxChat.value.id;
-                    const url = `/api/v1/ragflow-chat/delete-sessions/${chatId}`;
-                    const payload = { ids: [sesId], delete_all: false };
-                    try {
-                        const res = await fetch(url, {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        const data = await res.json();
-                        if (res.ok) {
-                            addLog('SUCCESS', `DELETE ${url} (删除指定会话)`, payload, data);
-                            sessionList.value = sessionList.value.filter(s => s.id !== sesId);
-                            if (activeSessionId.value === sesId) {
-                                if (sessionList.value.length > 0) {
-                                    selectSession(sessionList.value[0].id);
-                                } else {
-                                    activeSessionId.value = '';
-                                    chatMessages.value = [];
-                                }
-                            }
-                        } else {
-                            addLog('ERROR', `DELETE ${url} (删除指定会话失败)`, payload, data);
-                            alert('删除会话失败：' + (data.message || '未知错误'));
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `DELETE ${url} (删除指定会话异常)`, payload, { error: e.message });
-                    }
-                };
-
-                // Clear all sessions
-                const clearAllSessions = async () => {
-                    if (!confirm('确定清空该聊天助手下拥有的全部会话吗？')) return;
-                    if (!activeSandboxChat.value) return;
-                    const chatId = activeSandboxChat.value.id;
-                    const url = `/api/v1/ragflow-chat/delete-sessions/${chatId}`;
-                    const payload = { delete_all: true };
-                    try {
-                        const res = await fetch(url, {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        const data = await res.json();
-                        if (res.ok) {
-                            addLog('SUCCESS', `DELETE ${url} (清空全部会话)`, payload, data);
-                            sessionList.value = [];
-                            activeSessionId.value = '';
-                            chatMessages.value = [];
-                        } else {
-                            addLog('ERROR', `DELETE ${url} (清空全部会话失败)`, payload, data);
-                            alert('清空会话失败：' + (data.message || '未知错误'));
-                        }
-                    } catch (e) {
-                        addLog('ERROR', `DELETE ${url} (清空全部会话异常)`, payload, { error: e.message });
-                    }
-                };
-
-                // 打字机缓冲队列与定时器状态
-                let charQueue = [];
-                let typingInterval = null;
-                let isStreaming = false;
-                let replyText = '';
-
-                // Send dialog message (Multi-turn chat sandboxes context)
-                const sendMessage = async () => {
-                    if (!userInput.value.trim() || chatTyping.value || !activeSessionId.value) {
-                        if (!activeSessionId.value) alert('请先新建或选择一个会话以发起对话！');
-                        return;
-                    }
-
-                    const text = userInput.value;
-                    userInput.value = '';
-
-                    chatMessages.value.push({ role: 'user', content: text });
-                    scrollToBottom(false);
-                    chatTyping.value = true;
-
-                    // 映射为后端需要的多轮历史消息链格式
-                    const historyList = chatMessages.value.map(m => ({
-                        role: m.role,
-                        content: m.content
-                    }));
-
-                    const url = '/api/v1/ragflow-chat/send-chat-flow';
-                    const payload = {
-                        chat_id: activeSandboxChat.value.id,
-                        session_id: activeSessionId.value,
-                        messages: historyList
-                    };
-
-                    try {
-                        const res = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!res.ok) {
-                            const data = await res.json();
-                            chatMessages.value.push({ role: 'assistant', content: `【流式提问异常】：${data.message || '未获取到答案'}` });
-                            addLog('ERROR', `POST ${url} (流式追问失败)`, payload, data);
-                            chatTyping.value = false;
-                            scrollToBottom(true);
-                            return;
-                        }
-
-                        // 1. 在沙盒中推入空的 assistant 占位消息用于承载打字机流式字符
-                        chatMessages.value.push({ role: 'assistant', content: '' });
-                        scrollToBottom(false);
-
-                        // 2. 初始化打字机状态，开启缓冲机制
-                        charQueue = [];
-                        replyText = '';
-                        isStreaming = true;
-
-                        if (typingInterval) clearInterval(typingInterval);
-                        typingInterval = setInterval(() => {
-                            if (charQueue.length > 0) {
-                                // 追赶机制：如果积压了很多字，我们就加速吐字，避免滞后太多
-                                let charsToTake = 1;
-                                if (charQueue.length > 40) {
-                                    charsToTake = 5; // 严重拥堵，大幅度追赶
-                                } else if (charQueue.length > 20) {
-                                    charsToTake = 3; // 中度拥堵，略微追赶
-                                } else if (charQueue.length > 8) {
-                                    charsToTake = 2; // 轻度拥堵
-                                }
-
-                                for (let i = 0; i < charsToTake; i++) {
-                                    if (charQueue.length > 0) {
-                                        replyText += charQueue.shift();
-                                    }
-                                }
-
-                                // 4. 显式为 Proxy 拦截的响应式数组最后一项的 content 属性赋值，瞬间激发 Vue3 的 DOM 局部渲染刷新
-                                chatMessages.value[chatMessages.value.length - 1].content = replyText;
-                                scrollToBottom(false); // 仅滚动，避免高开销的 hljs 高亮计算
-                            } else if (!isStreaming) {
-                                // 如果网络流已结束且缓冲队列已全部渲染完毕，则彻底结束流式打字
-                                clearInterval(typingInterval);
-                                typingInterval = null;
-                                chatTyping.value = false;
-                                scrollToBottom(true); // 结束后，一次性对新出的所有代码块进行高亮，极致流畅
-                            }
-                        }, 25); // 25ms 的黄金吐字频率，带来行云流水般的打字机效果
-
-                        // 3. 启用流式字节读取器与 UTF-8 解码器
-                        const reader = res.body.getReader();
-                        const decoder = new TextDecoder('utf-8');
-                        let buffer = '';
-
-                        addLog('SUCCESS', `POST ${url} (流式连接建立成功)`, payload, {});
-
-                        while (true) {
-                            const { value, done } = await reader.read();
-                            if (done) break;
-
-                            buffer += decoder.decode(value, { stream: true });
-
-                            // 按行分隔符 "\n" 进行分片行切割解析
-                            const lines = buffer.split('\n');
-                            buffer = lines.pop(); // 留下最后未写完的半行在缓冲区
-
-                            for (const line of lines) {
-                                // 1. 严格过滤出带有 'data:' 头的 SSE 帧事件
-                                if (line.startsWith('data:')) {
-                                    // 提取 'data:' 承载体内容，只去除标准的单空格前缀
-                                    let jsonStr = line.substring(5);
-                                    if (jsonStr.startsWith(' ')) {
-                                        jsonStr = jsonStr.substring(1);
-                                    }
-                                    jsonStr = jsonStr.trim();
-
-                                    if (jsonStr) {
-                                        let textToken = '';
-                                        try {
-                                            // 2. 尝试将 Token 块从 JSON 字符串中还原，完美呈现换行 "\n" 和空格
-                                            const obj = JSON.parse(jsonStr);
-                                            if (obj && obj.text !== undefined) {
-                                                textToken = obj.text;
-                                            }
-                                        } catch (err) {
-                                            // 3. 稳健降级：如果不是标准的 JSON 消息，直接作为原始字符处理
-                                            textToken = jsonStr;
-                                        }
-
-                                        if (textToken) {
-                                            // 送入平滑缓冲队列，而非直接赋给 content 渲染
-                                            charQueue.push(...textToken.split(''));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        isStreaming = false; // 标记网络读取流已完全结束
-                    } catch (e) {
-                        isStreaming = false;
-                        chatTyping.value = false;
-                        if (typingInterval) {
-                            clearInterval(typingInterval);
-                            typingInterval = null;
-                        }
-                        chatMessages.value.push({ role: 'assistant', content: `【网络异常】：流式连接中断。` });
-                        addLog('ERROR', `POST ${url} (流式连接断开异常)`, payload, { error: e.message });
-                    }
-                    scrollToBottom(true);
-                };
-
-                const scrollToBottom = (forceHighlight = false) => {
-                    nextTick(() => {
-                        if (chatBox.value) {
-                            chatBox.value.scrollTop = chatBox.value.scrollHeight;
-                        }
-                        if (forceHighlight) {
-                            // 仅在明确指示时进行全量高亮，避免流生成时的严重主线程卡顿
-                            document.querySelectorAll('.markdown-body pre code').forEach(el => {
-                                if (!el.dataset.highlighted) {
-                                    hljs.highlightElement(el);
-                                    el.dataset.highlighted = 'true';
-                                }
-                            });
-                        }
-                    });
-                };
-
-                // 核心 Markdown 转换引擎方法定义
-                const renderMarkdown = (text) => {
-                    if (!text) return '';
-                    try {
-                        return marked.parse(text, {
-                            breaks: true,
-                            gfm: true
-                        });
-                    } catch (e) {
-                        return text;
-                    }
-                };
-
-                // Initialize
-                fetchList();
-                fetchDatasets();
-
-                return {
-                    activeTab,
-                    sections,
-                    toggleSection,
-                    list,
-                    datasetList,
-                    filterKeywords,
-                    filteredList,
-                    logs,
-                    form,
-                    isEditMode,
-                    crossLanguagesText,
-                    toggleDataset,
-                    addParameter,
-                    removeParameter,
-                    uploadAvatar,
-                    fetchList,
-                    resetForm,
-                    saveAssistant,
-                    loadToEdit,
-                    deleteAssistant,
-
-                    // Sandbox chat & Session variables
-                    activeSandboxChat,
-                    activeSessionId,
-                    sessionList,
-                    chatMessages,
-                    userInput,
-                    chatTyping,
-                    chatBox,
-                    switchToSessionTab,
-                    createNewSession,
-                    selectSession,
-                    renameSession,
-                    deleteSession,
-                    clearAllSessions,
-                    sendMessage,
-                    renderMarkdown // 挂载到 Vue 上供模板进行 v-html 高保真 Markdown 编译
-                };
-            }
-        }).mount('#app');
-    </script>
+    <!-- 引入拆分后的模块化 JS 逻辑脚本 -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/assistant.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
