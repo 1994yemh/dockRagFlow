@@ -1105,6 +1105,15 @@
 
                 // Select a session to load conversation
                 const selectSession = async (sesId) => {
+                    // 主动打断并清理上轮未输出完的打字机，防止多会话数据污染
+                    isStreaming = false;
+                    chatTyping.value = false;
+                    charQueue = [];
+                    if (typingInterval) {
+                        clearInterval(typingInterval);
+                        typingInterval = null;
+                    }
+
                     activeSessionId.value = sesId;
                     if (!activeSandboxChat.value || !sesId) return;
                     const chatId = activeSandboxChat.value.id;
@@ -1219,6 +1228,12 @@
                     }
                 };
 
+                // 打字机缓冲队列与定时器状态
+                let charQueue = [];
+                let typingInterval = null;
+                let isStreaming = false;
+                let replyText = '';
+
                 // Send dialog message (Multi-turn chat sandboxes context)
                 const sendMessage = async () => {
                     if (!userInput.value.trim() || chatTyping.value || !activeSessionId.value) {
@@ -1230,7 +1245,7 @@
                     userInput.value = '';
 
                     chatMessages.value.push({ role: 'user', content: text });
-                    scrollToBottom();
+                    scrollToBottom(false);
                     chatTyping.value = true;
 
                     // 映射为后端需要的多轮历史消息链格式
@@ -1257,19 +1272,54 @@
                             chatMessages.value.push({ role: 'assistant', content: `【流式提问异常】：${data.message || '未获取到答案'}` });
                             addLog('ERROR', `POST ${url} (流式追问失败)`, payload, data);
                             chatTyping.value = false;
-                            scrollToBottom();
+                            scrollToBottom(true);
                             return;
                         }
 
                         // 1. 在沙盒中推入空的 assistant 占位消息用于承载打字机流式字符
                         chatMessages.value.push({ role: 'assistant', content: '' });
-                        scrollToBottom();
+                        scrollToBottom(false);
 
-                        // 2. 启用流式字节读取器与 UTF-8 解码器
+                        // 2. 初始化打字机状态，开启缓冲机制
+                        charQueue = [];
+                        replyText = '';
+                        isStreaming = true;
+
+                        if (typingInterval) clearInterval(typingInterval);
+                        typingInterval = setInterval(() => {
+                            if (charQueue.length > 0) {
+                                // 追赶机制：如果积压了很多字，我们就加速吐字，避免滞后太多
+                                let charsToTake = 1;
+                                if (charQueue.length > 40) {
+                                    charsToTake = 5; // 严重拥堵，大幅度追赶
+                                } else if (charQueue.length > 20) {
+                                    charsToTake = 3; // 中度拥堵，略微追赶
+                                } else if (charQueue.length > 8) {
+                                    charsToTake = 2; // 轻度拥堵
+                                }
+
+                                for (let i = 0; i < charsToTake; i++) {
+                                    if (charQueue.length > 0) {
+                                        replyText += charQueue.shift();
+                                    }
+                                }
+
+                                // 4. 显式为 Proxy 拦截的响应式数组最后一项的 content 属性赋值，瞬间激发 Vue3 的 DOM 局部渲染刷新
+                                chatMessages.value[chatMessages.value.length - 1].content = replyText;
+                                scrollToBottom(false); // 仅滚动，避免高开销的 hljs 高亮计算
+                            } else if (!isStreaming) {
+                                // 如果网络流已结束且缓冲队列已全部渲染完毕，则彻底结束流式打字
+                                clearInterval(typingInterval);
+                                typingInterval = null;
+                                chatTyping.value = false;
+                                scrollToBottom(true); // 结束后，一次性对新出的所有代码块进行高亮，极致流畅
+                            }
+                        }, 25); // 25ms 的黄金吐字频率，带来行云流水般的打字机效果
+
+                        // 3. 启用流式字节读取器与 UTF-8 解码器
                         const reader = res.body.getReader();
                         const decoder = new TextDecoder('utf-8');
                         let buffer = '';
-                        let replyText = ''; // 引入局部变量，确保配合 Proxy 触发强响应
 
                         addLog('SUCCESS', `POST ${url} (流式连接建立成功)`, payload, {});
 
@@ -1307,36 +1357,41 @@
                                         }
 
                                         if (textToken) {
-                                            replyText += textToken;
-                                            // 4. 核心修复点：显式为 Proxy 拦截的响应式数组最后一项的 content 属性赋值，瞬间激发 Vue3 的 DOM 局部渲染刷新
-                                            chatMessages.value[chatMessages.value.length - 1].content = replyText;
-                                            scrollToBottom();
+                                            // 送入平滑缓冲队列，而非直接赋给 content 渲染
+                                            charQueue.push(...textToken.split(''));
                                         }
                                     }
                                 }
                             }
                         }
-                        chatTyping.value = false;
+                        isStreaming = false; // 标记网络读取流已完全结束
                     } catch (e) {
+                        isStreaming = false;
                         chatTyping.value = false;
+                        if (typingInterval) {
+                            clearInterval(typingInterval);
+                            typingInterval = null;
+                        }
                         chatMessages.value.push({ role: 'assistant', content: `【网络异常】：流式连接中断。` });
                         addLog('ERROR', `POST ${url} (流式连接断开异常)`, payload, { error: e.message });
                     }
-                    scrollToBottom();
+                    scrollToBottom(true);
                 };
 
-                const scrollToBottom = () => {
+                const scrollToBottom = (forceHighlight = false) => {
                     nextTick(() => {
                         if (chatBox.value) {
                             chatBox.value.scrollTop = chatBox.value.scrollHeight;
                         }
-                        // 高保真自动触发代码高亮，通过 dataset.highlighted 记录避免重复渲染，呵护流式吐字性能
-                        document.querySelectorAll('.markdown-body pre code').forEach(el => {
-                            if (!el.dataset.highlighted) {
-                                hljs.highlightElement(el);
-                                el.dataset.highlighted = 'true';
-                            }
-                        });
+                        if (forceHighlight) {
+                            // 仅在明确指示时进行全量高亮，避免流生成时的严重主线程卡顿
+                            document.querySelectorAll('.markdown-body pre code').forEach(el => {
+                                if (!el.dataset.highlighted) {
+                                    hljs.highlightElement(el);
+                                    el.dataset.highlighted = 'true';
+                                }
+                            });
+                        }
                     });
                 };
 
