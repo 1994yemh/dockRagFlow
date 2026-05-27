@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ragflow-search
+
+ragflow:
+  # RAGFlow 平台的主机及基础 API 路径
+  base-url: http://172.16.16.175:8088
+  # 您的 RAGFlow API Key (Bearer Token)
+  api-key: ragflow-E5omBq8whqg9bLk-y96PMUpdD2k53Kt0MCLykzMUp_4
+  # 默认的 Chat Assistant ID (OpenAI-compatible)
+  default-chat-id: your-chat-id-here
