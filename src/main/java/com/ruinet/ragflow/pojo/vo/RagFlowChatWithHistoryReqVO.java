@@ -27,6 +27,9 @@ public class RagFlowChatWithHistoryReqVO implements Serializable {
     @NotBlank(message = "聊天助手 ID 不能为空")
     private String chatId;
 
+    @Schema(description = "关联的会话 ID，传入后对话消息将自动持久化到该 Session", example = "9fa7691cb85c11ef9c5f0242ac120005")
+    private String sessionId;
+
     @Schema(description = "多轮对话的消息历史（包含本次的 user 提问，必须放在最后一条）", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotEmpty(message = "消息列表不能为空")
     private List<RagFlowSessionRespVO.MessageVO> messages = new ArrayList<>();

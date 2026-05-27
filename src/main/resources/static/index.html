@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAGFlow 聊天助手控制台</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Vue 3 -->
@@ -34,6 +37,7 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
         /* Glassmorphism Effect */
         .glass-card {
             background: rgba(22, 28, 45, 0.45);
@@ -42,27 +46,33 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
+
         .glass-card-interactive {
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
+
         .glass-card-interactive:hover {
             transform: translateY(-4px);
             background: rgba(22, 28, 45, 0.65);
             border-color: rgba(99, 102, 241, 0.3);
             box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
         }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.3);
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(99, 102, 241, 0.25);
             border-radius: 9999px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(99, 102, 241, 0.5);
         }
@@ -75,32 +85,53 @@
             font-size: 0.875rem;
             color: #cbd5e1;
         }
-        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3,
+        .markdown-body h4 {
             font-weight: 700;
             color: #f8fafc;
             margin-top: 1.2rem;
             margin-bottom: 0.6rem;
         }
-        .markdown-body h1 { 
-            font-size: 1.3rem; 
-            border-bottom: 1px solid rgba(255,255,255,0.08); 
-            padding-bottom: 0.3rem; 
+
+        .markdown-body h1 {
+            font-size: 1.3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.3rem;
         }
-        .markdown-body h2 { font-size: 1.18rem; }
-        .markdown-body h3 { font-size: 1.08rem; }
-        
+
+        .markdown-body h2 {
+            font-size: 1.18rem;
+        }
+
+        .markdown-body h3 {
+            font-size: 1.08rem;
+        }
+
         .markdown-body p {
             margin-bottom: 0.8rem;
         }
-        .markdown-body ul, .markdown-body ol {
+
+        .markdown-body ul,
+        .markdown-body ol {
             margin-bottom: 0.8rem;
             padding-left: 1.3rem;
         }
-        .markdown-body ul { list-style-type: disc; }
-        .markdown-body ol { list-style-type: decimal; }
+
+        .markdown-body ul {
+            list-style-type: disc;
+        }
+
+        .markdown-body ol {
+            list-style-type: decimal;
+        }
+
         .markdown-body li {
             margin-bottom: 0.3rem;
         }
+
         .markdown-body blockquote {
             border-left: 4px solid #6366f1;
             padding-left: 1rem;
@@ -111,7 +142,7 @@
             padding-top: 0.3rem;
             padding-bottom: 0.3rem;
         }
-        
+
         /* 尊贵深空色表格 Table */
         .markdown-body table {
             width: 100%;
@@ -119,20 +150,24 @@
             margin: 1.2rem 0;
             font-size: 0.8rem;
         }
-        .markdown-body th, .markdown-body td {
-            border: 1px solid rgba(255,255,255,0.08);
+
+        .markdown-body th,
+        .markdown-body td {
+            border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 0.6rem 0.8rem;
             text-align: left;
         }
+
         .markdown-body th {
             background-color: rgba(22, 28, 45, 0.95);
             color: #f1f5f9;
             font-weight: 600;
         }
+
         .markdown-body tr:nth-child(even) {
-            background-color: rgba(255,255,255,0.02);
+            background-color: rgba(255, 255, 255, 0.02);
         }
-        
+
         /* Highlight.js 代码高亮盒子深度美化 */
         .markdown-body pre {
             background: #090b10 !important;
@@ -143,6 +178,7 @@
             overflow-x: auto;
             position: relative;
         }
+
         .markdown-body code {
             font-family: 'Fira Code', 'mono', monospace;
             background: rgba(99, 102, 241, 0.12);
@@ -151,6 +187,7 @@
             border-radius: 6px;
             font-size: 0.85em;
         }
+
         .markdown-body pre code {
             background: none !important;
             color: #f1f5f9;
@@ -161,13 +198,15 @@
         }
     </style>
 </head>
+
 <body class="p-4 md:p-8 font-sans">
     <div id="app" class="max-w-7xl mx-auto flex flex-col gap-6" v-cloak>
-        
+
         <!-- Header -->
         <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
             <div>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">
+                <h1
+                    class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">
                     RAGFlow 聊天助手控制台
                 </h1>
                 <p class="text-slate-400 mt-2 text-sm md:text-base">
@@ -175,12 +214,17 @@
                 </p>
             </div>
             <div class="flex items-center gap-3">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
                     API 连接正常
                 </span>
-                <button @click="fetchList" class="px-4 py-2 text-sm font-medium glass-card rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 4.89M9 11l3 3L22 4"></path></svg>
+                <button @click="fetchList"
+                    class="px-4 py-2 text-sm font-medium glass-card rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 4.89M9 11l3 3L22 4"></path>
+                    </svg>
                     刷新列表
                 </button>
             </div>
@@ -188,45 +232,67 @@
 
         <!-- Dynamic Multi-Tab Page Navigators -->
         <div class="flex items-center gap-4 bg-slate-950/45 p-1.5 rounded-xl border border-slate-850 self-start">
-            <button @click="activeTab = 'assistant'" :class="activeTab === 'assistant' ? 'bg-indigo-600/90 text-white shadow-lg shadow-indigo-600/15' : 'text-slate-400 hover:text-slate-200'" class="px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <button @click="activeTab = 'assistant'"
+                :class="activeTab === 'assistant' ? 'bg-indigo-600/90 text-white shadow-lg shadow-indigo-600/15' : 'text-slate-400 hover:text-slate-200'"
+                class="px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
                 💬 聊天助手管理
             </button>
-            <button @click="activeTab = 'session'" :class="activeTab === 'session' ? 'bg-indigo-600/90 text-white shadow-lg shadow-indigo-600/15' : 'text-slate-400 hover:text-slate-200'" class="px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <button @click="activeTab = 'session'"
+                :class="activeTab === 'session' ? 'bg-indigo-600/90 text-white shadow-lg shadow-indigo-600/15' : 'text-slate-400 hover:text-slate-200'"
+                class="px-5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
+                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                    </path>
+                </svg>
                 🪵 会话管理与调试
             </button>
         </div>
 
         <!-- TAB 1: Chat Assistant Management (CRUD) -->
         <div v-show="activeTab === 'assistant'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             <!-- Left Panel: Form Control (7 Cols) -->
             <div class="lg:col-span-7 glass-card p-6 rounded-2xl flex flex-col gap-6 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -z-10"></div>
-                
+
                 <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                     <h2 class="text-xl font-bold flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
                         {{ isEditMode ? '编辑助手配置' : '新建聊天助手' }}
                     </h2>
-                    <button v-if="isEditMode" @click="resetForm" class="text-xs text-pink-400 hover:text-pink-300 flex items-center gap-1 transition-colors">
+                    <button v-if="isEditMode" @click="resetForm"
+                        class="text-xs text-pink-400 hover:text-pink-300 flex items-center gap-1 transition-colors">
                         清除编辑 / 返回新建
                     </button>
                 </div>
 
                 <!-- Form Inputs -->
                 <form @submit.prevent="saveAssistant" class="flex flex-col gap-5">
-                    
+
                     <!-- Basic Info Group -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">聊天助手名字 (必填)</label>
-                            <input type="text" v-model="form.name" required placeholder="例如：我的专属问答助手" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600">
+                            <label
+                                class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">聊天助手名字
+                                (必填)</label>
+                            <input type="text" v-model="form.name" required placeholder="例如：我的专属问答助手"
+                                class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">绑定的底层模型 ID (必填)</label>
-                            <input type="text" v-model="form.llm_id" required list="llm-options" placeholder="例如：qwen3-32b@Tongyi-Qianwen" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600">
+                            <label
+                                class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">绑定的底层模型
+                                ID (必填)</label>
+                            <input type="text" v-model="form.llm_id" required list="llm-options"
+                                placeholder="例如：qwen3-32b@Tongyi-Qianwen"
+                                class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600">
                             <datalist id="llm-options">
                                 <option value="qwen3-32b@Tongyi-Qianwen"></option>
                                 <option value="qwen-plus@Tongyi-Qianwen"></option>
@@ -238,20 +304,30 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">助手描述 (Description)</label>
-                            <input type="text" v-model="form.description" placeholder="例如：API 完整参数创建 Chat，用于验证 Web 端是否可编辑保存" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600">
+                            <label
+                                class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">助手描述
+                                (Description)</label>
+                            <input type="text" v-model="form.description"
+                                placeholder="例如：API 完整参数创建 Chat，用于验证 Web 端是否可编辑保存"
+                                class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Prompt 类型 (Type)</label>
-                                <select v-model="form.prompt_type" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                                <label
+                                    class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Prompt
+                                    类型 (Type)</label>
+                                <select v-model="form.prompt_type"
+                                    class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
                                     <option value="simple">simple (默认表单)</option>
                                     <option value="flow">flow (画布智能体)</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">显示引文 (Do Refer)</label>
-                                <select v-model="form.do_refer" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
+                                <label
+                                    class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">显示引文
+                                    (Do Refer)</label>
+                                <select v-model="form.do_refer"
+                                    class="w-full bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
                                     <option value="1">1 (启用标注)</option>
                                     <option value="0">0 (关闭引文)</option>
                                 </select>
@@ -260,18 +336,29 @@
                     </div>
 
                     <!-- Avatar Uploder Section (High Aesthetic Card) -->
-                    <div class="p-4 bg-slate-950/40 border border-slate-850 rounded-xl flex flex-col md:flex-row items-center gap-5">
-                        <div class="relative w-16 h-16 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div
+                        class="p-4 bg-slate-950/40 border border-slate-850 rounded-xl flex flex-col md:flex-row items-center gap-5">
+                        <div
+                            class="relative w-16 h-16 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden flex-shrink-0">
                             <img v-if="form.icon" :src="form.icon" class="w-full h-full object-cover">
-                            <svg v-else class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <button type="button" v-if="form.icon" @click="form.icon = ''" class="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center text-xs text-rose-400 font-bold">
+                            <svg v-else class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <button type="button" v-if="form.icon" @click="form.icon = ''"
+                                class="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center text-xs text-rose-400 font-bold">
                                 清除头像
                             </button>
                         </div>
                         <div class="flex flex-col gap-2 w-full">
-                            <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">选择本地头像图片上传 (Base64转换)</span>
-                            <div class="relative border border-dashed border-slate-800 hover:border-indigo-500/50 rounded-lg p-2 text-center cursor-pointer transition-colors bg-slate-900/30">
-                                <input type="file" @change="uploadAvatar" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">选择本地头像图片上传
+                                (Base64转换)</span>
+                            <div
+                                class="relative border border-dashed border-slate-800 hover:border-indigo-500/50 rounded-lg p-2 text-center cursor-pointer transition-colors bg-slate-900/30">
+                                <input type="file" @change="uploadAvatar" accept="image/*"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                                 <span class="text-xs text-slate-400">点击此处选择本地图片文件进行转码上传</span>
                             </div>
                         </div>
@@ -279,26 +366,38 @@
 
                     <!-- Dataset Checklist Grid (Highly Interactive Checkboxes Cards) -->
                     <div class="flex flex-col gap-2">
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">选择关联的知识库数据集 (可多选，点击卡片即切换状态)</label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">选择关联的知识库数据集
+                            (可多选，点击卡片即切换状态)</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-1">
-                            <div v-for="db in datasetList" :key="db.id" @click="toggleDataset(db.id)" :class="form.dataset_ids.includes(db.id) ? 'border-indigo-500/80 bg-indigo-950/20 ring-1 ring-indigo-500/35' : 'border-slate-800 bg-slate-900/25'" class="p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all hover:bg-slate-900/50">
+                            <div v-for="db in datasetList" :key="db.id" @click="toggleDataset(db.id)"
+                                :class="form.dataset_ids.includes(db.id) ? 'border-indigo-500/80 bg-indigo-950/20 ring-1 ring-indigo-500/35' : 'border-slate-800 bg-slate-900/25'"
+                                class="p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all hover:bg-slate-900/50">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/35 flex items-center justify-center font-bold text-indigo-400 text-xs">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/35 flex items-center justify-center font-bold text-indigo-400 text-xs">
                                         DB
                                     </div>
                                     <div>
                                         <h4 class="text-xs font-bold text-slate-200">{{ db.name }}</h4>
-                                        <p class="text-[9px] text-slate-500 truncate max-w-[150px] font-mono mt-0.5">ID: {{ db.id }}</p>
+                                        <p class="text-[9px] text-slate-500 truncate max-w-[150px] font-mono mt-0.5">ID:
+                                            {{ db.id }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="text-[9px] px-2 py-0.5 rounded bg-slate-950 text-slate-400">文档: {{ db.document_count || 0 }}</span>
-                                    <div :class="form.dataset_ids.includes(db.id) ? 'bg-indigo-500 border-indigo-500' : 'border-slate-700'" class="w-4 h-4 rounded border flex items-center justify-center transition-colors">
-                                        <svg v-if="form.dataset_ids.includes(db.id)" class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                    <span class="text-[9px] px-2 py-0.5 rounded bg-slate-950 text-slate-400">文档: {{
+                                        db.document_count || 0 }}</span>
+                                    <div :class="form.dataset_ids.includes(db.id) ? 'bg-indigo-500 border-indigo-500' : 'border-slate-700'"
+                                        class="w-4 h-4 rounded border flex items-center justify-center transition-colors">
+                                        <svg v-if="form.dataset_ids.includes(db.id)" class="w-3.5 h-3.5 text-white"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="datasetList.length === 0" class="text-center py-6 text-slate-500 text-xs italic md:col-span-2">
+                            <div v-if="datasetList.length === 0"
+                                class="text-center py-6 text-slate-500 text-xs italic md:col-span-2">
                                 正在获取当前租户知识库列表，若为空请先至 RAGFlow 平台构建...
                             </div>
                         </div>
@@ -306,93 +405,140 @@
 
                     <!-- Foldable Options 1: LLM Settings -->
                     <div class="border border-slate-800/80 rounded-xl overflow-hidden bg-slate-900/10">
-                        <button type="button" @click="toggleSection('llm')" class="w-full flex items-center justify-between px-4 py-3 bg-slate-900/40 text-sm font-semibold hover:bg-slate-900/60 transition-colors">
+                        <button type="button" @click="toggleSection('llm')"
+                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-900/40 text-sm font-semibold hover:bg-slate-900/60 transition-colors">
                             <span class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                                    </path>
+                                </svg>
                                 1. 底层大模型参数设置 (Llm Settings)
                             </span>
-                            <svg class="w-4 h-4 transform transition-transform duration-200" :class="sections.llm ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <svg class="w-4 h-4 transform transition-transform duration-200"
+                                :class="sections.llm ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div v-show="sections.llm" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-800 bg-slate-900/20">
+                        <div v-show="sections.llm"
+                            class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-800 bg-slate-900/20">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">模型类型 (Model Type)</label>
-                                <select v-model="form.llm_setting.model_type" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                                <select v-model="form.llm_setting.model_type"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
                                     <option value="chat">chat (通用对话模型)</option>
                                     <option value="image2text">image2text (多模态模型)</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">随机性 (Temperature): {{ form.llm_setting.temperature }}</label>
-                                <input type="range" min="0" max="2" step="0.1" v-model.number="form.llm_setting.temperature" class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
+                                <label class="block text-xs text-slate-400 mb-1">随机性 (Temperature): {{
+                                    form.llm_setting.temperature }}</label>
+                                <input type="range" min="0" max="2" step="0.1"
+                                    v-model.number="form.llm_setting.temperature"
+                                    class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">核采样 (Top P): {{ form.llm_setting.top_p }}</label>
-                                <input type="range" min="0" max="1" step="0.05" v-model.number="form.llm_setting.top_p" class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
+                                <label class="block text-xs text-slate-400 mb-1">核采样 (Top P): {{ form.llm_setting.top_p
+                                    }}</label>
+                                <input type="range" min="0" max="1" step="0.05" v-model.number="form.llm_setting.top_p"
+                                    class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">存在惩罚 (Presence Penalty): {{ form.llm_setting.presence_penalty }}</label>
-                                <input type="range" min="-2" max="2" step="0.1" v-model.number="form.llm_setting.presence_penalty" class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
+                                <label class="block text-xs text-slate-400 mb-1">存在惩罚 (Presence Penalty): {{
+                                    form.llm_setting.presence_penalty }}</label>
+                                <input type="range" min="-2" max="2" step="0.1"
+                                    v-model.number="form.llm_setting.presence_penalty"
+                                    class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-xs text-slate-400 mb-1">频率惩罚 (Frequency Penalty): {{ form.llm_setting.frequency_penalty }}</label>
-                                <input type="range" min="-2" max="2" step="0.1" v-model.number="form.llm_setting.frequency_penalty" class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
+                                <label class="block text-xs text-slate-400 mb-1">频率惩罚 (Frequency Penalty): {{
+                                    form.llm_setting.frequency_penalty }}</label>
+                                <input type="range" min="-2" max="2" step="0.1"
+                                    v-model.number="form.llm_setting.frequency_penalty"
+                                    class="w-full accent-indigo-500 bg-slate-800 rounded-lg appearance-none h-1.5">
                             </div>
                         </div>
                     </div>
 
                     <!-- Foldable Options 2: Prompt Config -->
                     <div class="border border-slate-800/80 rounded-xl overflow-hidden bg-slate-900/10">
-                        <button type="button" @click="toggleSection('prompt')" class="w-full flex items-center justify-between px-4 py-3 bg-slate-900/40 text-sm font-semibold hover:bg-slate-900/60 transition-colors">
+                        <button type="button" @click="toggleSection('prompt')"
+                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-900/40 text-sm font-semibold hover:bg-slate-900/60 transition-colors">
                             <span class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
                                 2. 角色提示词与行为配置 (Prompt Config)
                             </span>
-                            <svg class="w-4 h-4 transform transition-transform duration-200" :class="sections.prompt ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <svg class="w-4 h-4 transform transition-transform duration-200"
+                                :class="sections.prompt ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div v-show="sections.prompt" class="p-4 flex flex-col gap-4 border-t border-slate-800 bg-slate-900/20">
+                        <div v-show="sections.prompt"
+                            class="p-4 flex flex-col gap-4 border-t border-slate-800 bg-slate-900/20">
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">系统角色设定 (System Prompt)</label>
-                                <textarea rows="3" v-model="form.prompt_config.system" placeholder="系统提示词设定..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500 font-mono"></textarea>
+                                <textarea rows="3" v-model="form.prompt_config.system" placeholder="系统提示词设定..."
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500 font-mono"></textarea>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs text-slate-400 mb-1">对话开场白 (Prologue)</label>
-                                    <input type="text" v-model="form.prompt_config.prologue" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                                    <input type="text" v-model="form.prompt_config.prologue"
+                                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
                                 </div>
                                 <div>
                                     <label class="block text-xs text-slate-400 mb-1">空匹配回复语 (Empty Response)</label>
-                                    <input type="text" v-model="form.prompt_config.empty_response" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                                    <input type="text" v-model="form.prompt_config.empty_response"
+                                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
                                 </div>
                             </div>
 
                             <!-- Switches Grid -->
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 bg-slate-950/40 p-3 rounded-lg border border-slate-850">
+                            <div
+                                class="grid grid-cols-2 md:grid-cols-3 gap-3 bg-slate-950/40 p-3 rounded-lg border border-slate-850">
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.quote" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.quote"
+                                        class="accent-cyan-500 rounded">
                                     <span>引文溯源与标注</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.keyword" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.keyword"
+                                        class="accent-cyan-500 rounded">
                                     <span>开启关键词检索</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.tts" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.tts"
+                                        class="accent-cyan-500 rounded">
                                     <span>启用语音合成(TTS)</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.refine_multiturn" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.refine_multiturn"
+                                        class="accent-cyan-500 rounded">
                                     <span>提炼多轮对话</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.use_kg" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.use_kg"
+                                        class="accent-cyan-500 rounded">
                                     <span>启用知识图谱检索</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.reasoning" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.reasoning"
+                                        class="accent-cyan-500 rounded">
                                     <span>开启深度推理</span>
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-xs">
-                                    <input type="checkbox" v-model="form.prompt_config.toc_enhance" class="accent-cyan-500 rounded">
+                                    <input type="checkbox" v-model="form.prompt_config.toc_enhance"
+                                        class="accent-cyan-500 rounded">
                                     <span>目录(TOC)检索增强</span>
                                 </label>
                             </div>
@@ -400,11 +546,14 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs text-slate-400 mb-1">跨语言翻译列表 (逗号分隔)</label>
-                                    <input type="text" v-model="crossLanguagesText" placeholder="例如：English, Chinese" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                                    <input type="text" v-model="crossLanguagesText" placeholder="例如：English, Chinese"
+                                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
                                 </div>
                                 <div>
                                     <label class="block text-xs text-slate-400 mb-1">Tavily Web Search API Key</label>
-                                    <input type="password" v-model="form.prompt_config.tavily_api_key" placeholder="可选输入" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500 font-mono">
+                                    <input type="password" v-model="form.prompt_config.tavily_api_key"
+                                        placeholder="可选输入"
+                                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500 font-mono">
                                 </div>
                             </div>
 
@@ -412,20 +561,30 @@
                             <div>
                                 <div class="flex items-center justify-between mb-1.5">
                                     <label class="block text-xs text-slate-400">大模型 System 变量配置 (Parameters)</label>
-                                    <button type="button" @click="addParameter" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold">+ 增加变量</button>
+                                    <button type="button" @click="addParameter"
+                                        class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold">+
+                                        增加变量</button>
                                 </div>
                                 <div class="flex flex-col gap-2">
-                                    <div v-for="(p, idx) in form.prompt_config.parameters" :key="idx" class="flex items-center gap-3 bg-slate-950/60 p-2 rounded-lg border border-slate-900">
-                                        <input type="text" v-model="p.key" placeholder="变量名 (如 knowledge)" class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs focus:outline-none w-1/2 font-mono">
+                                    <div v-for="(p, idx) in form.prompt_config.parameters" :key="idx"
+                                        class="flex items-center gap-3 bg-slate-950/60 p-2 rounded-lg border border-slate-900">
+                                        <input type="text" v-model="p.key" placeholder="变量名 (如 knowledge)"
+                                            class="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs focus:outline-none w-1/2 font-mono">
                                         <label class="flex items-center gap-1.5 cursor-pointer text-xs">
                                             <input type="checkbox" v-model="p.optional" class="accent-indigo-500">
                                             <span>是否可选</span>
                                         </label>
-                                        <button type="button" @click="removeParameter(idx)" class="ml-auto text-xs text-red-400 hover:text-red-300">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <button type="button" @click="removeParameter(idx)"
+                                            class="ml-auto text-xs text-red-400 hover:text-red-300">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+                                            </svg>
                                         </button>
                                     </div>
-                                    <p v-if="form.prompt_config.parameters.length === 0" class="text-slate-600 text-xs italic">当前未设置自定义参数变量，默认关联 knowledge 预设变量</p>
+                                    <p v-if="form.prompt_config.parameters.length === 0"
+                                        class="text-slate-600 text-xs italic">当前未设置自定义参数变量，默认关联 knowledge 预设变量</p>
                                 </div>
                             </div>
                         </div>
@@ -433,43 +592,65 @@
 
                     <!-- Foldable Options 3: Retrieval Settings -->
                     <div class="border border-slate-800/80 rounded-xl overflow-hidden bg-slate-900/10">
-                        <button type="button" @click="toggleSection('retrieval')" class="w-full flex items-center justify-between px-4 py-3 bg-slate-900/40 text-sm font-semibold hover:bg-slate-900/60 transition-colors">
+                        <button type="button" @click="toggleSection('retrieval')"
+                            class="w-full flex items-center justify-between px-4 py-3 bg-slate-900/40 text-sm font-semibold hover:bg-slate-900/60 transition-colors">
                             <span class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
                                 3. 知识检索与重排算法配置 (Retrieval & Rerank)
                             </span>
-                            <svg class="w-4 h-4 transform transition-transform duration-200" :class="sections.retrieval ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <svg class="w-4 h-4 transform transition-transform duration-200"
+                                :class="sections.retrieval ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div v-show="sections.retrieval" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-800 bg-slate-900/20">
+                        <div v-show="sections.retrieval"
+                            class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-800 bg-slate-900/20">
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">相似度阈值 (Similarity Threshold): {{ form.similarity_threshold }}</label>
-                                <input type="range" min="0" max="1" step="0.05" v-model.number="form.similarity_threshold" class="w-full accent-emerald-500 bg-slate-800 rounded-lg appearance-none h-1.5">
+                                <label class="block text-xs text-slate-400 mb-1">相似度阈值 (Similarity Threshold): {{
+                                    form.similarity_threshold }}</label>
+                                <input type="range" min="0" max="1" step="0.05"
+                                    v-model.number="form.similarity_threshold"
+                                    class="w-full accent-emerald-500 bg-slate-800 rounded-lg appearance-none h-1.5">
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">混合检索向量权重 (Vector Weight): {{ form.vector_similarity_weight }}</label>
-                                <input type="range" min="0" max="1" step="0.05" v-model.number="form.vector_similarity_weight" class="w-full accent-emerald-500 bg-slate-800 rounded-lg appearance-none h-1.5">
+                                <label class="block text-xs text-slate-400 mb-1">混合检索向量权重 (Vector Weight): {{
+                                    form.vector_similarity_weight }}</label>
+                                <input type="range" min="0" max="1" step="0.05"
+                                    v-model.number="form.vector_similarity_weight"
+                                    class="w-full accent-emerald-500 bg-slate-800 rounded-lg appearance-none h-1.5">
                             </div>
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">最终输出 Top N (最终取条数)</label>
-                                <input type="number" v-model.number="form.top_n" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                                <input type="number" v-model.number="form.top_n"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
                             </div>
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">检索过滤 Top K (粗筛条数)</label>
-                                <input type="number" v-model.number="form.top_k" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
+                                <input type="number" v-model.number="form.top_k"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-xs text-slate-400 mb-1">重排模型 ID (Rerank Model ID)</label>
-                                <input type="text" v-model="form.rerank_id" placeholder="可选填入指定的重排模型 ID" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500 font-mono">
+                                <input type="text" v-model="form.rerank_id" placeholder="可选填入指定的重排模型 ID"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500 font-mono">
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex items-center gap-4 border-t border-slate-800 pt-5">
-                        <button type="submit" class="px-6 py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 text-sm font-semibold hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 transition-all text-white flex-1 md:flex-initial">
+                        <button type="submit"
+                            class="px-6 py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 via-indigo-600 to-cyan-500 text-sm font-semibold hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 transition-all text-white flex-1 md:flex-initial">
                             {{ isEditMode ? '更新助手配置' : '新建聊天助手' }}
                         </button>
-                        <button type="button" @click="resetForm" class="px-6 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm font-semibold active:scale-95 transition-all">
+                        <button type="button" @click="resetForm"
+                            class="px-6 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm font-semibold active:scale-95 transition-all">
                             重置配置
                         </button>
                     </div>
@@ -478,7 +659,7 @@
 
             <!-- Right Panel: List view (5 Cols) -->
             <div class="lg:col-span-5 flex flex-col gap-6">
-                
+
                 <!-- Assistant List Card -->
                 <div class="glass-card p-6 rounded-2xl flex flex-col gap-4 max-h-[600px] overflow-hidden">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -491,27 +672,35 @@
 
                     <!-- Simple Filter Query -->
                     <div class="relative">
-                        <input type="text" v-model="filterKeywords" placeholder="输入关键字模糊搜索..." class="w-full bg-slate-900/60 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors placeholder:text-slate-600">
+                        <input type="text" v-model="filterKeywords" placeholder="输入关键字模糊搜索..."
+                            class="w-full bg-slate-900/60 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-cyan-500 transition-colors placeholder:text-slate-600">
                         <span class="absolute left-3 top-2.5 text-slate-500">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
                         </span>
                     </div>
 
                     <!-- Cards Scroller -->
                     <div class="flex flex-col gap-3 overflow-y-auto pr-1">
-                        <div v-for="item in filteredList" :key="item.id" class="glass-card glass-card-interactive p-4 rounded-xl flex flex-col gap-2 relative">
+                        <div v-for="item in filteredList" :key="item.id"
+                            class="glass-card glass-card-interactive p-4 rounded-xl flex flex-col gap-2 relative">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400 uppercase overflow-hidden">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400 uppercase overflow-hidden">
                                         <img v-if="item.icon" :src="item.icon" class="w-full h-full object-cover">
                                         <span v-else>{{ item.name.substring(0, 1) }}</span>
                                     </div>
                                     <div>
                                         <h3 class="font-bold text-sm text-slate-100">{{ item.name }}</h3>
-                                        <p class="text-[10px] text-indigo-400 font-mono tracking-tight mt-0.5 truncate max-w-[200px]" :title="item.id">ID: {{ item.id }}</p>
+                                        <p class="text-[10px] text-indigo-400 font-mono tracking-tight mt-0.5 truncate max-w-[200px]"
+                                            :title="item.id">ID: {{ item.id }}</p>
                                     </div>
                                 </div>
-                                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+                                <span
+                                    class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
                                     {{ item.llm_id.split('@')[0] }}
                                 </span>
                             </div>
@@ -521,22 +710,39 @@
                             </p>
 
                             <div class="flex items-center gap-3 text-[11px] text-slate-500 mt-1">
-                                <span>关联知识库: <strong class="text-slate-300 font-medium">{{ item.dataset_ids ? item.dataset_ids.length : 0 }} 个</strong></span>
+                                <span>关联知识库: <strong class="text-slate-300 font-medium">{{ item.dataset_ids ?
+                                        item.dataset_ids.length : 0 }} 个</strong></span>
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-850"></span>
-                                <span>温度: <strong class="text-slate-300 font-medium">{{ item.llm_setting ? item.llm_setting.temperature : '0.1' }}</strong></span>
+                                <span>温度: <strong class="text-slate-300 font-medium">{{ item.llm_setting ?
+                                        item.llm_setting.temperature : '0.1' }}</strong></span>
                             </div>
 
                             <div class="flex items-center gap-2 mt-2 border-t border-slate-800/60 pt-2.5">
-                                <button @click="loadToEdit(item)" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                <button @click="loadToEdit(item)"
+                                    class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                        </path>
+                                    </svg>
                                     配置编辑
                                 </button>
-                                <button @click="switchToSessionTab(item)" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                <button @click="switchToSessionTab(item)"
+                                    class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                        </path>
+                                    </svg>
                                     会话管理/调试
                                 </button>
-                                <button @click="deleteAssistant(item.id)" class="text-xs font-semibold text-rose-500 hover:text-rose-400 transition-colors flex items-center gap-1 ml-auto">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                <button @click="deleteAssistant(item.id)"
+                                    class="text-xs font-semibold text-rose-500 hover:text-rose-400 transition-colors flex items-center gap-1 ml-auto">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                        </path>
+                                    </svg>
                                     删除
                                 </button>
                             </div>
@@ -553,23 +759,26 @@
 
         <!-- TAB 2: Conversation and Session Management (Independent Page Tab) -->
         <div v-show="activeTab === 'session'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             <!-- Left panel: Selected Assistant Context & Session CRUD (4 Cols) -->
             <div class="lg:col-span-4 flex flex-col gap-5">
-                
+
                 <!-- Assistant context card -->
                 <div class="glass-card p-5 rounded-2xl flex flex-col gap-3 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-xl -z-10"></div>
                     <span class="text-[9px] font-semibold text-slate-500 uppercase tracking-widest block">当前关联助手</span>
-                    
+
                     <div v-if="activeSandboxChat" class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/35 flex items-center justify-center font-bold text-indigo-400 overflow-hidden flex-shrink-0">
-                            <img v-if="activeSandboxChat.icon" :src="activeSandboxChat.icon" class="w-full h-full object-cover">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/35 flex items-center justify-center font-bold text-indigo-400 overflow-hidden flex-shrink-0">
+                            <img v-if="activeSandboxChat.icon" :src="activeSandboxChat.icon"
+                                class="w-full h-full object-cover">
                             <span v-else>{{ activeSandboxChat.name.substring(0, 1) }}</span>
                         </div>
                         <div>
                             <h3 class="font-bold text-sm text-slate-100">{{ activeSandboxChat.name }}</h3>
-                            <p class="text-[10px] text-slate-400 font-mono truncate max-w-[180px] mt-0.5" :title="activeSandboxChat.id">ID: {{ activeSandboxChat.id }}</p>
+                            <p class="text-[10px] text-slate-400 font-mono truncate max-w-[180px] mt-0.5"
+                                :title="activeSandboxChat.id">ID: {{ activeSandboxChat.id }}</p>
                         </div>
                     </div>
                     <div v-else class="text-xs text-amber-400/90 py-2 italic">
@@ -584,21 +793,27 @@
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                             会话列表 (Sessions)
                         </h3>
-                        <button @click="createNewSession" class="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1">
+                        <button @click="createNewSession"
+                            class="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold flex items-center gap-1">
                             + 新建会话
                         </button>
                     </div>
 
                     <!-- Session list cards -->
                     <div class="flex flex-col gap-2.5 overflow-y-auto pr-1">
-                        <div v-for="ses in sessionList" :key="ses.id" :class="activeSessionId === ses.id ? 'border-indigo-500/80 bg-indigo-950/20' : 'border-slate-850 hover:bg-slate-900/30'" class="p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all">
+                        <div v-for="ses in sessionList" :key="ses.id"
+                            :class="activeSessionId === ses.id ? 'border-indigo-500/80 bg-indigo-950/20' : 'border-slate-850 hover:bg-slate-900/30'"
+                            class="p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all">
                             <div @click="selectSession(ses.id)" class="flex-1 min-w-0 pr-2">
                                 <h4 class="text-xs font-bold text-slate-200 truncate">{{ ses.name }}</h4>
-                                <span class="text-[9px] text-slate-500 font-mono block mt-0.5 truncate">{{ ses.id }}</span>
+                                <span class="text-[9px] text-slate-500 font-mono block mt-0.5 truncate">{{ ses.id
+                                    }}</span>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
-                                <button @click.stop="renameSession(ses)" class="text-[10px] text-cyan-400 hover:text-cyan-300">重命名</button>
-                                <button @click.stop="deleteSession(ses.id)" class="text-[10px] text-rose-500 hover:text-rose-400">删除</button>
+                                <button @click.stop="renameSession(ses)"
+                                    class="text-[10px] text-cyan-400 hover:text-cyan-300">重命名</button>
+                                <button @click.stop="deleteSession(ses.id)"
+                                    class="text-[10px] text-rose-500 hover:text-rose-400">删除</button>
                             </div>
                         </div>
 
@@ -609,19 +824,22 @@
                     </div>
 
                     <!-- Clear all sessions button -->
-                    <button v-if="sessionList.length > 0" @click="clearAllSessions" class="w-full py-2 bg-rose-950/20 border border-rose-900/40 hover:bg-rose-950/40 text-rose-400 rounded-lg text-xs font-semibold transition-colors mt-auto">
+                    <button v-if="sessionList.length > 0" @click="clearAllSessions"
+                        class="w-full py-2 bg-rose-950/20 border border-rose-900/40 hover:bg-rose-950/40 text-rose-400 rounded-lg text-xs font-semibold transition-colors mt-auto">
                         一键清空该助手所有会话
                     </button>
                 </div>
             </div>
 
             <!-- Right panel: Elegant Conversation sandbox window (8 Cols) -->
-            <div class="lg:col-span-8 glass-card p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden h-[580px]">
+            <div
+                class="lg:col-span-8 glass-card p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden h-[580px]">
                 <div class="absolute top-0 left-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl -z-10"></div>
-                
+
                 <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full" :class="activeSessionId ? 'bg-emerald-500 animate-pulse' : 'bg-slate-700'"></span>
+                        <span class="w-2.5 h-2.5 rounded-full"
+                            :class="activeSessionId ? 'bg-emerald-500 animate-pulse' : 'bg-slate-700'"></span>
                         <h2 class="text-sm font-bold text-slate-100">
                             {{ activeSessionId ? '对话调试沙盒 (活动会话模式)' : '对话调试沙盒 (待命模式)' }}
                         </h2>
@@ -629,22 +847,28 @@
                 </div>
 
                 <!-- Chat message boxes -->
-                <div ref="chatBox" class="flex flex-col gap-4 flex-1 overflow-y-auto bg-slate-950/40 p-4 rounded-xl border border-slate-900 text-xs">
+                <div ref="chatBox"
+                    class="flex flex-col gap-4 flex-1 overflow-y-auto bg-slate-950/40 p-4 rounded-xl border border-slate-900 text-xs">
                     <!-- Standard Greeting -->
                     <div v-if="activeSandboxChat" class="flex flex-col gap-1 items-start max-w-[85%]">
                         <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">智能助手</span>
-                        <div class="bg-indigo-950/30 border border-indigo-900/40 p-3 rounded-2xl rounded-tl-none text-slate-200 leading-relaxed w-full">
+                        <div
+                            class="bg-indigo-950/30 border border-indigo-900/40 p-3 rounded-2xl rounded-tl-none text-slate-200 leading-relaxed w-full">
                             <!-- 允许智能开场白支持高保真 Markdown 渲染 -->
-                            <div class="markdown-body" v-html="renderMarkdown(activeSandboxChat.prompt_config ? activeSandboxChat.prompt_config.prologue : '您好！我是您的智能搜索助理。')"></div>
+                            <div class="markdown-body"
+                                v-html="renderMarkdown(activeSandboxChat.prompt_config ? activeSandboxChat.prompt_config.prologue : '您好！我是您的智能搜索助理。')">
+                            </div>
                         </div>
                     </div>
 
                     <!-- Loop Messages -->
-                    <div v-for="(msg, index) in chatMessages" :key="index" class="flex flex-col gap-1 max-w-[85%]" :class="msg.role === 'user' ? 'items-end ml-auto' : 'items-start'">
+                    <div v-for="(msg, index) in chatMessages" :key="index" class="flex flex-col gap-1 max-w-[85%]"
+                        :class="msg.role === 'user' ? 'items-end ml-auto' : 'items-start'">
                         <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
                             {{ msg.role === 'user' ? '您' : '智能助手' }}
                         </span>
-                        <div class="p-3 rounded-2xl text-slate-200 border leading-relaxed w-full" :class="msg.role === 'user' ? 'bg-indigo-600 border-indigo-500 rounded-tr-none' : 'bg-slate-900/60 border-slate-800 rounded-tl-none'">
+                        <div class="p-3 rounded-2xl text-slate-200 border leading-relaxed w-full"
+                            :class="msg.role === 'user' ? 'bg-indigo-600 border-indigo-500 rounded-tr-none' : 'bg-slate-900/60 border-slate-800 rounded-tl-none'">
                             <!-- 用户消息直接保留换行纯文本即可，助手消息则挂载 Markdown 豪华渲染器 -->
                             <p v-if="msg.role === 'user'" class="whitespace-pre-wrap">{{ msg.content }}</p>
                             <div v-else class="markdown-body" v-html="renderMarkdown(msg.content)"></div>
@@ -654,7 +878,8 @@
                     <!-- Loader message -->
                     <div v-if="chatTyping" class="flex flex-col gap-1 items-start max-w-[85%]">
                         <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">智能助手</span>
-                        <div class="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-400 italic flex items-center gap-2">
+                        <div
+                            class="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-400 italic flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></span>
                             <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-300"></span>
@@ -663,16 +888,24 @@
                     </div>
 
                     <!-- Unselected Empty View -->
-                    <div v-if="!activeSandboxChat" class="h-full flex flex-col items-center justify-center text-slate-600 gap-2">
-                        <svg class="w-12 h-12 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <div v-if="!activeSandboxChat"
+                        class="h-full flex flex-col items-center justify-center text-slate-600 gap-2">
+                        <svg class="w-12 h-12 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                            </path>
+                        </svg>
                         <p class="text-xs italic">请先在下方或左侧列表中选择一个活跃的聊天助手，系统将自动切入调试状态</p>
                     </div>
                 </div>
 
                 <!-- Message Inputs -->
                 <form @submit.prevent="sendMessage" class="flex gap-2.5">
-                    <input type="text" v-model="userInput" :disabled="!activeSandboxChat" required placeholder="向聊天助手提问问题 (RAG检索模式)..." class="flex-1 bg-slate-900/80 border border-slate-850 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-600 disabled:opacity-50">
-                    <button type="submit" :disabled="!activeSandboxChat" class="px-5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 rounded-xl text-xs font-semibold active:scale-95 transition-all text-white flex items-center gap-1 disabled:opacity-50">
+                    <input type="text" v-model="userInput" :disabled="!activeSandboxChat" required
+                        placeholder="向聊天助手提问问题 (RAG检索模式)..."
+                        class="flex-1 bg-slate-900/80 border border-slate-850 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-600 disabled:opacity-50">
+                    <button type="submit" :disabled="!activeSandboxChat"
+                        class="px-5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 rounded-xl text-xs font-semibold active:scale-95 transition-all text-white flex items-center gap-1 disabled:opacity-50">
                         发送消息
                     </button>
                 </form>
@@ -685,27 +918,34 @@
                 <span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
                 实时 JSON 数据包调试日志 (Hacker Style Console)
             </h2>
-            <div class="bg-slate-950 p-3 rounded-lg border border-slate-900 font-mono text-xs overflow-y-auto max-h-[180px] flex flex-col gap-2.5">
+            <div
+                class="bg-slate-950 p-3 rounded-lg border border-slate-900 font-mono text-xs overflow-y-auto max-h-[180px] flex flex-col gap-2.5">
                 <div v-for="(log, idx) in logs" :key="idx" class="border-b border-slate-900 pb-2 last:border-b-0">
                     <div class="flex items-center justify-between text-[10px] mb-1">
                         <span class="text-indigo-400 font-semibold">{{ log.time }}</span>
-                        <span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-wider font-extrabold" :class="log.type === 'SUCCESS' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'">
+                        <span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-wider font-extrabold"
+                            :class="log.type === 'SUCCESS' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'">
                             {{ log.type }}
                         </span>
                     </div>
                     <p class="text-cyan-400 text-[10px] mb-1 font-semibold">{{ log.action }}</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <span class="text-[9px] text-slate-500 block uppercase mb-0.5 tracking-wide">REQUEST JSON</span>
-                            <pre class="bg-slate-900/60 p-2 rounded text-[10px] text-slate-400 overflow-x-auto select-all font-mono">{{ JSON.stringify(log.req, null, 2) }}</pre>
+                            <span class="text-[9px] text-slate-500 block uppercase mb-0.5 tracking-wide">REQUEST
+                                JSON</span>
+                            <pre
+                                class="bg-slate-900/60 p-2 rounded text-[10px] text-slate-400 overflow-x-auto select-all font-mono">{{ JSON.stringify(log.req, null, 2) }}</pre>
                         </div>
                         <div>
-                            <span class="text-[9px] text-slate-500 block uppercase mb-0.5 tracking-wide">RESPONSE JSON</span>
-                            <pre class="bg-slate-900/60 p-2 rounded text-[10px] text-slate-300 overflow-x-auto select-all font-mono">{{ JSON.stringify(log.resp, null, 2) }}</pre>
+                            <span class="text-[9px] text-slate-500 block uppercase mb-0.5 tracking-wide">RESPONSE
+                                JSON</span>
+                            <pre
+                                class="bg-slate-900/60 p-2 rounded text-[10px] text-slate-300 overflow-x-auto select-all font-mono">{{ JSON.stringify(log.resp, null, 2) }}</pre>
                         </div>
                     </div>
                 </div>
-                <p v-if="logs.length === 0" class="text-slate-600 text-xs italic text-center py-2">暂无调试日志，触发任何 CRUD 动作将实时捕获并滚动呈现在此处</p>
+                <p v-if="logs.length === 0" class="text-slate-600 text-xs italic text-center py-2">暂无调试日志，触发任何 CRUD
+                    动作将实时捕获并滚动呈现在此处</p>
             </div>
         </section>
 
@@ -803,8 +1043,8 @@
                 const filteredList = computed(() => {
                     if (!filterKeywords.value.trim()) return list.value;
                     const kw = filterKeywords.value.toLowerCase();
-                    return list.value.filter(item => 
-                        item.name.toLowerCase().includes(kw) || 
+                    return list.value.filter(item =>
+                        item.name.toLowerCase().includes(kw) ||
                         item.id.toLowerCase().includes(kw)
                     );
                 });
@@ -875,9 +1115,9 @@
                             // 4. 以 0.8 的高质量压缩转换为小巧保真的 JPEG Base64 编码
                             const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
                             form.value.icon = compressedBase64;
-                            addLog('SUCCESS', '图片自动居中裁剪压缩成功', { 
-                                original_size: (file.size / 1024).toFixed(1) + ' KB', 
-                                compressed_size: (compressedBase64.length / 1024).toFixed(1) + ' KB' 
+                            addLog('SUCCESS', '图片自动居中裁剪压缩成功', {
+                                original_size: (file.size / 1024).toFixed(1) + ' KB',
+                                compressed_size: (compressedBase64.length / 1024).toFixed(1) + ' KB'
                             }, {});
                         };
                         img.onerror = () => {
@@ -920,10 +1160,10 @@
 
                 const saveAssistant = async () => {
                     const actionName = isEditMode.value ? '更新聊天助手' : '创建聊天助手';
-                    const url = isEditMode.value 
-                        ? '/api/v1/ragflow-chat/update-chat-assistant' 
+                    const url = isEditMode.value
+                        ? '/api/v1/ragflow-chat/update-chat-assistant'
                         : '/api/v1/ragflow-chat/create-chat-assistant';
-                    
+
                     const payload = { ...form.value };
                     if (isEditMode.value) {
                         payload.id = editId.value;
@@ -935,9 +1175,9 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
                         });
-                        
+
                         const responseData = await res.json();
-                        
+
                         if (res.ok && (!responseData.code || responseData.code === 0)) {
                             addLog('SUCCESS', `POST ${url} (${actionName})`, payload, responseData);
                             alert(`${actionName}成功！`);
@@ -955,11 +1195,11 @@
 
                 const loadToEdit = (item) => {
                     const itemCopy = JSON.parse(JSON.stringify(item));
-                    
+
                     if (!itemCopy.llm_setting) itemCopy.llm_setting = {};
                     if (!itemCopy.prompt_config) itemCopy.prompt_config = {};
                     if (!itemCopy.prompt_config.parameters) itemCopy.prompt_config.parameters = [];
-                    
+
                     form.value = {
                         name: itemCopy.name || '',
                         icon: itemCopy.icon || '',
@@ -999,11 +1239,11 @@
 
                     isEditMode.value = true;
                     editId.value = itemCopy.id;
-                    
+
                     sections.value.llm = true;
                     sections.value.prompt = true;
                     sections.value.retrieval = true;
-                    
+
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 };
 
@@ -1014,7 +1254,7 @@
                     try {
                         const res = await fetch(url, { method: 'DELETE' });
                         const data = await res.json();
-                        
+
                         if (res.ok) {
                             addLog('SUCCESS', `DELETE ${url} (删除聊天助手)`, { id }, data);
                             alert('删除成功！');
@@ -1257,6 +1497,7 @@
                     const url = '/api/v1/ragflow-chat/send-chat-flow';
                     const payload = {
                         chat_id: activeSandboxChat.value.id,
+                        session_id: activeSessionId.value,
                         messages: historyList
                     };
 
@@ -1328,7 +1569,7 @@
                             if (done) break;
 
                             buffer += decoder.decode(value, { stream: true });
-                            
+
                             // 按行分隔符 "\n" 进行分片行切割解析
                             const lines = buffer.split('\n');
                             buffer = lines.pop(); // 留下最后未写完的半行在缓冲区
@@ -1455,4 +1696,5 @@
         }).mount('#app');
     </script>
 </body>
+
 </html>

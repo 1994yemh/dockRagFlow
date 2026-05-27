@@ -759,81 +759,116 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
             throw new ServiceException("RAGFlow API Key 未正确配置");
         }
 
-        String openaiCompatibleUrl = String.format("%s/api/v1/openai/%s", 
-                StrUtil.removeSuffix(baseUrl, "/"), reqVO.getChatId());
+        // 1. 构建 RAGFlow 原生对话端点 URL（支持 session_id 自动持久化对话记录）
+        String url = String.format("%s/api/v1/chat/completions", StrUtil.removeSuffix(baseUrl, "/"));
 
-        // 1. 构建 langchain4j 流式模型实例，对接通义千问 Qwen3 默认大模型
-        StreamingChatLanguageModel streamingModel = OpenAiStreamingChatModel.builder()
-                .baseUrl(openaiCompatibleUrl)
-                .apiKey(apiKey)
-                .modelName("qwen3-32b@Tongyi-Qianwen")
-                .timeout(Duration.ofSeconds(60))
-                .logRequests(true)
-                .logResponses(true)
-                .build();
+        // 2. 构建请求 Body：chat_id + session_id + stream + messages（仅取最后一条 user 消息作为 question）
+        java.util.Map<String, Object> bodyMap = new java.util.LinkedHashMap<>();
+        bodyMap.put("chat_id", reqVO.getChatId());
+        if (StrUtil.isNotBlank(reqVO.getSessionId())) {
+            bodyMap.put("session_id", reqVO.getSessionId());
+        }
+        bodyMap.put("stream", true);
 
-        // 2. 创建 Spring 内置流式发射器，指定 120 秒超时时间
+        // 将完整历史消息列表传递给 RAGFlow，让 RAGFlow 自行处理上下文
+        java.util.List<java.util.Map<String, String>> messageList = new java.util.ArrayList<>();
+        for (RagFlowSessionRespVO.MessageVO msg : reqVO.getMessages()) {
+            java.util.Map<String, String> msgMap = new java.util.LinkedHashMap<>();
+            msgMap.put("role", msg.getRole());
+            msgMap.put("content", msg.getContent());
+            messageList.add(msgMap);
+        }
+        bodyMap.put("messages", messageList);
+
+        String requestJson;
+        try {
+            requestJson = objectMapper.writeValueAsString(bodyMap);
+        } catch (Exception e) {
+            throw new ServiceException("序列化流式对话请求参数失败：%s", e.getMessage());
+        }
+
+        // 3. 创建 Spring SSE 发射器，超时 120 秒
         SseEmitter emitter = new SseEmitter(120000L);
 
-        // 3. 构建多轮对话的 langchain4j 消息链
-        List<ChatMessage> langchainMessages = new java.util.ArrayList<>();
-        for (RagFlowSessionRespVO.MessageVO msg : reqVO.getMessages()) {
-            if ("user".equalsIgnoreCase(msg.getRole())) {
-                langchainMessages.add(UserMessage.from(msg.getContent()));
-            } else if ("assistant".equalsIgnoreCase(msg.getRole())) {
-                langchainMessages.add(AiMessage.from(msg.getContent()));
-            } else if ("system".equalsIgnoreCase(msg.getRole())) {
-                langchainMessages.add(SystemMessage.from(msg.getContent()));
+        // 4. 异步线程中发起 HTTP 流式请求并逐行推送 SSE 事件
+        new Thread(() -> {
+            try {
+                java.io.InputStream inputStream = HttpRequest.post(url)
+                        .header("Authorization", "Bearer " + apiKey)
+                        .header("Content-Type", "application/json")
+                        .body(requestJson)
+                        .timeout(120000)
+                        .executeAsync()
+                        .bodyStream();
+
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8));
+
+                // RAGFlow 原生 SSE 的 answer 是累积式的，需做差量提取，只推送新增字符给前端打字机
+                String[] previousAnswer = {""};
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // RAGFlow 原生 SSE 帧格式：data:{JSON}
+                    if (line.startsWith("data:")) {
+                        String jsonStr = line.substring(5).trim();
+
+                        // 结束标志
+                        if ("[DONE]".equals(jsonStr)) {
+                            break;
+                        }
+
+                        if (StrUtil.isNotBlank(jsonStr)) {
+                            try {
+                                JsonNode rootNode = objectMapper.readTree(jsonStr);
+                                int code = rootNode.path("code").asInt(0);
+                                if (code != 0) {
+                                    String errMsg = rootNode.path("message").asText("未知错误");
+                                    System.err.println("[RAGFlow 流式对话错误]: " + errMsg);
+                                    continue;
+                                }
+
+                                JsonNode dataNode = rootNode.path("data");
+
+                                // 终止帧：data 为 true 表示流结束
+                                if (dataNode.isBoolean() && dataNode.asBoolean()) {
+                                    break;
+                                }
+
+                                // 提取累积文本 answer 字段，并计算与上次的差量
+                                String fullAnswer = dataNode.path("answer").asText("");
+                                if (StrUtil.isNotBlank(fullAnswer) && fullAnswer.length() > previousAnswer[0].length()) {
+                                    String delta = fullAnswer.substring(previousAnswer[0].length());
+                                    previousAnswer[0] = fullAnswer;
+
+                                    // 将增量文本封装为 JSON 推送（与原有前端解析格式保持兼容）
+                                    java.util.Map<String, String> dataMap = new java.util.HashMap<>();
+                                    dataMap.put("text", delta);
+                                    String json = objectMapper.writeValueAsString(dataMap);
+
+                                    System.out.print(delta);
+                                    System.out.flush();
+                                    emitter.send(SseEmitter.event().data(json));
+                                }
+                            } catch (Exception e) {
+                                // 静默处理解析异常，继续读取下一行
+                            }
+                        }
+                    }
+                }
+
+                reader.close();
+                System.out.println("\n[RAGFlow 流式对话生成完成]");
+                emitter.complete();
+            } catch (Exception e) {
+                try {
+                    System.err.println("\n[RAGFlow 流式对话异常]: " + e.getMessage());
+                    emitter.completeWithError(e);
+                } catch (Exception ignored) {
+                    // 静默关闭通道
+                }
             }
-        }
-
-        // 4. 异步监听并推送大模型 Token 字符流
-        try {
-            streamingModel.chat(langchainMessages, new StreamingChatResponseHandler() {
-                @Override
-                public void onPartialResponse(String partialResponse) {
-                    try {
-                        // 在控制台实时逐字冲刷输出，方便后端瞬间感知流式生成节奏
-                        System.out.print(partialResponse);
-                        System.out.flush();
-
-                        // 将 Token (partialResponse) 封装进 Map 并序列化为标准 JSON 字符串
-                        // Jackson 序列化会自动对换行符 \n、回车符 \r 以及 Markdown 特殊符号进行转义，确保物理传输高保真
-                        java.util.Map<String, String> dataMap = new java.util.HashMap<>();
-                        dataMap.put("text", partialResponse);
-                        String json = objectMapper.writeValueAsString(dataMap);
-
-                        // 通过 SSE 协议通道发射给前端
-                        emitter.send(SseEmitter.event().data(json));
-                    } catch (Exception e) {
-                        // 捕获并静默处理诸如前端断开连接等网络异端
-                    }
-                }
-
-                @Override
-                public void onCompleteResponse(ChatResponse response) {
-                    try {
-                        System.out.println("\n[RAGFlow 流式对话生成完成]");
-                        emitter.complete();
-                    } catch (Exception e) {
-                        // 静默关闭通道
-                    }
-                }
-
-                @Override
-                public void onError(Throwable error) {
-                    try {
-                        System.err.println("\n[RAGFlow 流式对话生成异常]: " + error.getMessage());
-                        emitter.completeWithError(error);
-                    } catch (Exception e) {
-                        // 静默关闭通道
-                    }
-                }
-            });
-        } catch (Exception e) {
-            emitter.completeWithError(e);
-            throw new ServiceException("启动流式对话失败：%s", e.getMessage());
-        }
+        }, "ragflow-sse-stream-thread").start();
 
         return emitter;
     }
