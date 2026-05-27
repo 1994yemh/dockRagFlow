@@ -835,20 +835,31 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
                                     break;
                                 }
 
-                                // 提取累积文本 answer 字段，并计算与上次的差量
+                                // 提取累积文本 answer 字段，并进行健壮的增量/重置差量提取，防范大模型思考过程与正式回答内容重置时造成的交织乱序与严重卡顿
                                 String fullAnswer = dataNode.path("answer").asText("");
-                                if (StrUtil.isNotBlank(fullAnswer) && fullAnswer.length() > previousAnswer[0].length()) {
-                                    String delta = fullAnswer.substring(previousAnswer[0].length());
-                                    previousAnswer[0] = fullAnswer;
+                                if (StrUtil.isNotBlank(fullAnswer)) {
+                                    String delta = "";
+                                    if (fullAnswer.startsWith(previousAnswer[0])) {
+                                        // 1. 正常单调追加状态，安全截取差量
+                                        delta = fullAnswer.substring(previousAnswer[0].length());
+                                        previousAnswer[0] = fullAnswer;
+                                    } else {
+                                        // 2. 内容发生非单调跳变（如从思考过程切换到最终解答，或发生了清空重置）
+                                        // 此时重置历史基准，将当前内容重新全量视为增量发出，杜绝截断卡死与乱码
+                                        delta = fullAnswer;
+                                        previousAnswer[0] = fullAnswer;
+                                    }
 
-                                    // 将增量文本封装为 JSON 推送（与原有前端解析格式保持兼容）
-                                    java.util.Map<String, String> dataMap = new java.util.HashMap<>();
-                                    dataMap.put("text", delta);
-                                    String json = objectMapper.writeValueAsString(dataMap);
+                                    if (StrUtil.isNotBlank(delta)) {
+                                        // 将增量文本封装为 JSON 推送（与原有前端解析格式保持兼容）
+                                        java.util.Map<String, String> dataMap = new java.util.HashMap<>();
+                                        dataMap.put("text", delta);
+                                        String json = objectMapper.writeValueAsString(dataMap);
 
-                                    System.out.print(delta);
-                                    System.out.flush();
-                                    emitter.send(SseEmitter.event().data(json));
+                                        System.out.print(delta);
+                                        System.out.flush();
+                                        emitter.send(SseEmitter.event().data(json));
+                                    }
                                 }
                             } catch (Exception e) {
                                 // 静默处理解析异常，继续读取下一行
