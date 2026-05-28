@@ -71,5 +71,24 @@
 2. **更新助手逻辑**：同步修改 `updateChatAssistant` 方法，废除将其转为 Map 并 `bodyMap.put("llm_setting", new HashMap<>())` 覆盖的逻辑，对其引入完全相同的 `llmSetting` 级联非空补足逻辑。
 
 
+## ⚙️ 前后端默认字段参数同步对齐 (最新追加)
+
+### 变更上下文
+为了保持前后端大模型智能体参数的统一，如果前端发起的创建/更新请求中没有覆盖某些非空属性，后端在反序列化映射类时也必须自带系统黄金默认值。
+这涵盖了前端 `createDefaultForm` 方法中设定的各项非空属性，包括主模型的 `description`、`llm_id`、`rerank_id`、`top_n` 检索条数，以及 `prompt_config` 内部的角色系统 Prompt 与空匹配答复词等。
+
+### 实现方案
+1. **修改 VO 默认初始化值**：
+   在 `RagFlowChatAssistantCreateReqVO.java` 中直接声明其默认值：
+   *   `description` 设为 `"API 完整参数创建 Chat，用于验证 Web 端是否可编辑保存"`；
+   *   `llmId` 设为 `"qwen3-32b@Tongyi-Qianwen"`；
+   *   `rerankId` 设为 `"qwen3-rerank@Tongyi-Qianwen"`；
+   *   `topN` 设为 `8`；
+   *   `promptConfig.system` 设为与前端对齐的系统深度总结提示词模板（包含引文检索必须的 `{knowledge}` 插槽）；
+   *   `promptConfig.emptyResponse` 设为与前端一致的空字符串 `""`。
+2. **编译验证**：使用 `mvn clean compile` 进行了完整编译检查，结果为 **BUILD SUCCESS**。
+
+
+
 
 

@@ -30,8 +30,8 @@ public class RagFlowChatAssistantCreateReqVO implements Serializable {
     @Schema(description = "Base64 编码的头像图片", example = "")
     private String icon = "";
 
-    @Schema(description = "聊天助手描述", example = "API 完整参数创建 Chat")
-    private String description = "API 完整参数创建 Chat";
+    @Schema(description = "聊天助手描述", example = "API 完整参数创建 Chat，用于验证 Web 端是否可编辑保存")
+    private String description = "API 完整参数创建 Chat，用于验证 Web 端是否可编辑保存";
 
     @Schema(description = "智能体 Prompt 模式类型，默认 simple", example = "simple")
     private String promptType = "simple";
@@ -42,9 +42,9 @@ public class RagFlowChatAssistantCreateReqVO implements Serializable {
     @Schema(description = "关联的知识库 ID 列表", example = "[\"0b2cbc8c877f11ef89070242ac120005\"]")
     private List<String> datasetIds = new ArrayList<>();
 
-    @Schema(description = "指定的底层大模型 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "qwen-plus@Tongyi-Qianwen")
+    @Schema(description = "指定的底层大模型 ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "qwen3-32b@Tongyi-Qianwen")
     @NotBlank(message = "指定的底层大模型 ID 不能为空")
-    private String llmId;
+    private String llmId = "qwen3-32b@Tongyi-Qianwen";
 
     @Schema(description = "底层大模型参数设置")
     @Valid
@@ -60,14 +60,14 @@ public class RagFlowChatAssistantCreateReqVO implements Serializable {
     @Schema(description = "向量相似度权重", example = "0.3")
     private Double vectorSimilarityWeight = 0.3;
 
-    @Schema(description = "Top N 检索条数", example = "6")
-    private Integer topN = 6;
+    @Schema(description = "Top N 检索条数", example = "8")
+    private Integer topN = 8;
 
     @Schema(description = "Top K 检索候选块数", example = "1024")
     private Integer topK = 1024;
 
-    @Schema(description = "重排模型 ID", example = "")
-    private String rerankId = "";
+    @Schema(description = "重排模型 ID", example = "qwen3-rerank@Tongyi-Qianwen")
+    private String rerankId = "qwen3-rerank@Tongyi-Qianwen";
 
     /**
      * 大模型参数配置。
@@ -103,14 +103,14 @@ public class RagFlowChatAssistantCreateReqVO implements Serializable {
     public static class PromptConfigVO implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        @Schema(description = "系统角色 Prompt 设定", example = "You are an intelligent assistant...")
-        private String system = "You are an intelligent assistant...";
+        @Schema(description = "系统角色 Prompt 设定", example = "你是一个专业且严谨的智能搜索助手...")
+        private String system = "你是一个专业且严谨的智能搜索助手。请根据提供的知识库内容，对用户的问题进行深刻的理解与条理清晰的归纳总结。回答应结构分明、专业精炼，避免直接照搬大段未处理的原始文本。如果知识库中存在相关内容，请用您自己的话配合 Markdown 格式排版进行解答。当所有知识库内容都与问题无关时，调用llm语言模型获取相关答案，回答问题。\n以下是知识库：\n{knowledge}\n以上是知识库。";
 
         @Schema(description = "开场白", example = "您好！我是您的智能搜索助理。")
         private String prologue = "您好！我是您的智能搜索助理。";
 
-        @Schema(description = "未匹配知识库时的空回复词", example = "抱歉！在知识库中未找到相关内容。")
-        private String emptyResponse = "抱歉！在知识库中未找到相关内容。";
+        @Schema(description = "未匹配知识库时的空回复词", example = "")
+        private String emptyResponse = "";
 
         @Schema(description = "是否开启引文溯源与引文标注", example = "true")
         private Boolean quote = true;
