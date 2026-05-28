@@ -121,7 +121,29 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
             throw new ServiceException("RAGFlow API Key 未正确配置");
         }
 
-        // 2. 将入参对象序列化为蛇形命名的 JSON 字符串
+        // 2. 补全大模型参数 (llm_setting) 默认值以防前端遗漏传入
+        RagFlowChatAssistantCreateReqVO.LlmSettingVO setting = reqVO.getLlmSetting();
+        if (setting == null) {
+            setting = new RagFlowChatAssistantCreateReqVO.LlmSettingVO();
+            reqVO.setLlmSetting(setting);
+        }
+        if (setting.getModelType() == null) {
+            setting.setModelType("chat");
+        }
+        if (setting.getTemperature() == null) {
+            setting.setTemperature(0.1);
+        }
+        if (setting.getTopP() == null) {
+            setting.setTopP(0.3);
+        }
+        if (setting.getPresencePenalty() == null) {
+            setting.setPresencePenalty(0.4);
+        }
+        if (setting.getFrequencyPenalty() == null) {
+            setting.setFrequencyPenalty(0.7);
+        }
+
+        // 3. 将入参对象序列化为蛇形命名的 JSON 字符串
         String requestJson;
         try {
             requestJson = objectMapper.writeValueAsString(reqVO);
@@ -191,13 +213,36 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
             throw new ServiceException("RAGFlow API Key 未正确配置");
         }
 
-        // 2. 将入参对象序列化为蛇形命名的 JSON 字符串
+        // 2. 补全大模型参数 (llm_setting) 默认值以防前端遗漏传入
+        RagFlowChatAssistantCreateReqVO.LlmSettingVO setting = reqVO.getLlmSetting();
+        if (setting == null) {
+            setting = new RagFlowChatAssistantCreateReqVO.LlmSettingVO();
+            reqVO.setLlmSetting(setting);
+        }
+        if (setting.getModelType() == null) {
+            setting.setModelType("chat");
+        }
+        if (setting.getTemperature() == null) {
+            setting.setTemperature(0.1);
+        }
+        if (setting.getTopP() == null) {
+            setting.setTopP(0.3);
+        }
+        if (setting.getPresencePenalty() == null) {
+            setting.setPresencePenalty(0.4);
+        }
+        if (setting.getFrequencyPenalty() == null) {
+            setting.setFrequencyPenalty(0.7);
+        }
+
+        // 3. 将入参对象序列化为蛇形命名的 JSON 字符串
         String requestJson;
         try {
             requestJson = objectMapper.writeValueAsString(reqVO);
         } catch (Exception e) {
             throw new ServiceException("序列化聊天助手更新配置参数失败：%s", e.getMessage());
         }
+
 
         // 3. 拼接 RAGFlow 后端 API 路由，发送 PUT 请求进行覆盖更新
         String url = String.format("%s/api/v1/chats/%s", 

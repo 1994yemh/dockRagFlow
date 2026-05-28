@@ -9,7 +9,7 @@
  * @param {Function} addLog 日志记录函数
  * @returns {Object} 响应式状态和方法
  */
-function useSessionModule(addLog) {
+function useSessionModule(addLog, showModal) {
     const { ref, nextTick } = Vue;
 
     // ==========================================
@@ -74,23 +74,33 @@ function useSessionModule(addLog) {
     const createNewSession = async () => {
         if (!activeSandboxChat.value) return;
         const chatId = activeSandboxChat.value.id;
-        const sName = prompt('请输入新会话的名称：', `会话 ${sessionList.value.length + 1}`);
-        if (!sName || !sName.trim()) return;
-
-        const payload = { name: sName.trim() };
-        try {
-            const result = await RagFlowAPI.createSession(chatId, payload);
-            if (result.ok) {
-                addLog('SUCCESS', `POST (新建会话)`, payload, result.data);
-                sessionList.value.push(result.data);
-                selectSession(result.data.id);
-            } else {
-                addLog('ERROR', `POST (新建会话失败)`, payload, result.data);
-                alert('创建会话失败：' + (result.data.message || '未知错误'));
+        const defaultName = `会话 ${sessionList.value.length + 1}`;
+        
+        showModal({
+            title: '新建会话',
+            message: '请输入新会话的名称：',
+            type: 'prompt',
+            defaultValue: defaultName,
+            placeholder: '输入会话名称...',
+            onConfirm: async (sName) => {
+                if (!sName || !sName.trim()) return;
+                const payload = { name: sName.trim() };
+                try {
+                    const result = await RagFlowAPI.createSession(chatId, payload);
+                    if (result.ok) {
+                        addLog('SUCCESS', `POST (新建会话)`, payload, result.data);
+                        sessionList.value.push(result.data);
+                        selectSession(result.data.id);
+                    } else {
+                        addLog('ERROR', `POST (新建会话失败)`, payload, result.data);
+                        showModal({ title: '创建失败', message: '创建会话失败：' + (result.data.message || '未知错误'), type: 'alert' });
+                    }
+                } catch (e) {
+                    addLog('ERROR', `POST (新建会话异常)`, payload, { error: e.message });
+                    showModal({ title: '发生异常', message: '发送请求异常：' + e.message, type: 'alert' });
+                }
             }
-        } catch (e) {
-            addLog('ERROR', `POST (新建会话异常)`, payload, { error: e.message });
-        }
+        });
     };
 
     /** 选择会话并加载对话历史 */
@@ -131,84 +141,112 @@ function useSessionModule(addLog) {
     const renameSession = async (ses) => {
         if (!activeSandboxChat.value) return;
         const chatId = activeSandboxChat.value.id;
-        const newName = prompt('请输入新的会话名称：', ses.name);
-        if (!newName || !newName.trim()) return;
-
-        const payload = { name: newName.trim() };
-        try {
-            const result = await RagFlowAPI.updateSession(chatId, ses.id, payload);
-            if (result.ok) {
-                addLog('SUCCESS', `PATCH (重命名会话)`, payload, result.data);
-                ses.name = result.data.name;
-            } else {
-                addLog('ERROR', `PATCH (重命名会话失败)`, payload, result.data);
-                alert('重命名失败：' + (result.data.message || '未知错误'));
+        
+        showModal({
+            title: '会话重命名',
+            message: '请输入新的会话名称：',
+            type: 'prompt',
+            defaultValue: ses.name,
+            placeholder: '输入新的名称...',
+            onConfirm: async (newName) => {
+                if (!newName || !newName.trim()) return;
+                const payload = { name: newName.trim() };
+                try {
+                    const result = await RagFlowAPI.updateSession(chatId, ses.id, payload);
+                    if (result.ok) {
+                        addLog('SUCCESS', `PATCH (重命名会话)`, payload, result.data);
+                        ses.name = result.data.name;
+                    } else {
+                        addLog('ERROR', `PATCH (重命名会话失败)`, payload, result.data);
+                        showModal({ title: '重命名失败', message: '重命名失败：' + (result.data.message || '未知错误'), type: 'alert' });
+                    }
+                } catch (e) {
+                    addLog('ERROR', `PATCH (重命名会话异常)`, payload, { error: e.message });
+                    showModal({ title: '发生异常', message: '重命名发送异常：' + e.message, type: 'alert' });
+                }
             }
-        } catch (e) {
-            addLog('ERROR', `PATCH (重命名会话异常)`, payload, { error: e.message });
-        }
+        });
     };
 
     /** 删除单个会话 */
     const deleteSession = async (sesId) => {
-        if (!confirm('您确定要删除该会话吗？历史消息记录将会清空。')) return;
         if (!activeSandboxChat.value) return;
         const chatId = activeSandboxChat.value.id;
-        const payload = { ids: [sesId], delete_all: false };
-
-        try {
-            const result = await RagFlowAPI.deleteSessions(chatId, payload);
-            if (result.ok) {
-                addLog('SUCCESS', `DELETE (删除指定会话)`, payload, result.data);
-                sessionList.value = sessionList.value.filter(s => s.id !== sesId);
-                if (activeSessionId.value === sesId) {
-                    if (sessionList.value.length > 0) {
-                        selectSession(sessionList.value[0].id);
+        
+        showModal({
+            title: '删除会话',
+            message: '您确定要删除该会话吗？历史消息记录将会清空。',
+            type: 'confirm',
+            onConfirm: async () => {
+                const payload = { ids: [sesId], delete_all: false };
+                try {
+                    const result = await RagFlowAPI.deleteSessions(chatId, payload);
+                    if (result.ok) {
+                        addLog('SUCCESS', `DELETE (删除指定会话)`, payload, result.data);
+                        sessionList.value = sessionList.value.filter(s => s.id !== sesId);
+                        if (activeSessionId.value === sesId) {
+                            if (sessionList.value.length > 0) {
+                                selectSession(sessionList.value[0].id);
+                            } else {
+                                activeSessionId.value = '';
+                                chatMessages.value = [];
+                            }
+                        }
                     } else {
-                        activeSessionId.value = '';
-                        chatMessages.value = [];
+                        addLog('ERROR', `DELETE (删除指定会话失败)`, payload, result.data);
+                        showModal({ title: '删除失败', message: '删除会话失败：' + (result.data.message || '未知错误'), type: 'alert' });
                     }
+                } catch (e) {
+                    addLog('ERROR', `DELETE (删除指定会话异常)`, payload, { error: e.message });
+                    showModal({ title: '发生异常', message: '删除会话发生异常：' + e.message, type: 'alert' });
                 }
-            } else {
-                addLog('ERROR', `DELETE (删除指定会话失败)`, payload, result.data);
-                alert('删除会话失败：' + (result.data.message || '未知错误'));
             }
-        } catch (e) {
-            addLog('ERROR', `DELETE (删除指定会话异常)`, payload, { error: e.message });
-        }
+        });
     };
 
     /** 清空全部会话 */
     const clearAllSessions = async () => {
-        if (!confirm('确定清空该聊天助手下拥有的全部会话吗？')) return;
         if (!activeSandboxChat.value) return;
         const chatId = activeSandboxChat.value.id;
-        const payload = { delete_all: true };
-
-        try {
-            const result = await RagFlowAPI.deleteSessions(chatId, payload);
-            if (result.ok) {
-                addLog('SUCCESS', `DELETE (清空全部会话)`, payload, result.data);
-                sessionList.value = [];
-                activeSessionId.value = '';
-                chatMessages.value = [];
-            } else {
-                addLog('ERROR', `DELETE (清空全部会话失败)`, payload, result.data);
-                alert('清空会话失败：' + (result.data.message || '未知错误'));
+        
+        showModal({
+            title: '清空全部会话',
+            message: '确定清空该聊天助手下拥有的全部会话吗？此操作不可恢复。',
+            type: 'confirm',
+            onConfirm: async () => {
+                const payload = { delete_all: true };
+                try {
+                    const result = await RagFlowAPI.deleteSessions(chatId, payload);
+                    if (result.ok) {
+                        addLog('SUCCESS', `DELETE (清空全部会话)`, payload, result.data);
+                        sessionList.value = [];
+                        activeSessionId.value = '';
+                        chatMessages.value = [];
+                    } else {
+                        addLog('ERROR', `DELETE (清空全部会话失败)`, payload, result.data);
+                        showModal({ title: '清空失败', message: '清空会话失败：' + (result.data.message || '未知错误'), type: 'alert' });
+                    }
+                } catch (e) {
+                    addLog('ERROR', `DELETE (清空全部会话异常)`, payload, { error: e.message });
+                    showModal({ title: '发生异常', message: '清空会话发生异常：' + e.message, type: 'alert' });
+                }
             }
-        } catch (e) {
-            addLog('ERROR', `DELETE (清空全部会话异常)`, payload, { error: e.message });
-        }
+        });
     };
 
     // ==========================================
     //  流式对话（打字机缓冲队列 + SSE 字节流解析）
     // ==========================================
 
-    /** 发送对话消息 */
     const sendMessage = async () => {
         if (!userInput.value.trim() || chatTyping.value || !activeSessionId.value) {
-            if (!activeSessionId.value) alert('请先新建或选择一个会话以发起对话！');
+            if (!activeSessionId.value) {
+                showModal({
+                    title: '提示',
+                    message: '请先新建或选择一个会话以发起对话！',
+                    type: 'alert'
+                });
+            }
             return;
         }
 

@@ -36,15 +36,47 @@ createApp({
             if (logs.value.length > 10) logs.value.pop();
         };
 
+        /** 自定义高级模态对话框状态 */
+        const customModal = ref({
+            show: false,
+            title: '系统提示',
+            message: '',
+            type: 'alert', // 'alert' | 'confirm' | 'prompt'
+            inputValue: '',
+            placeholder: '请输入...',
+            onConfirm: null,
+            onCancel: null
+        });
+
+        /** 唤起自定义高级模态对话框工具函数 */
+        const showModal = ({ title, message, type = 'alert', defaultValue = '', placeholder = '', onConfirm, onCancel }) => {
+            customModal.value = {
+                show: true,
+                title: title || (type === 'prompt' ? '输入信息' : type === 'confirm' ? '确认操作' : '系统提示'),
+                message,
+                type,
+                inputValue: defaultValue,
+                placeholder: placeholder || '请输入...',
+                onConfirm: (val) => {
+                    customModal.value.show = false;
+                    if (onConfirm) onConfirm(val);
+                },
+                onCancel: () => {
+                    customModal.value.show = false;
+                    if (onCancel) onCancel();
+                }
+            };
+        };
+
         // ==========================================
         //  模块初始化
         // ==========================================
 
         // Tab1: 聊天助手管理模块
-        const assistant = useAssistantModule(addLog);
+        const assistant = useAssistantModule(addLog, showModal);
 
         // Tab2: 会话管理与流式对话模块
-        const session = useSessionModule(addLog);
+        const session = useSessionModule(addLog, showModal);
 
         // ==========================================
         //  模块间交互桥接
@@ -83,6 +115,7 @@ createApp({
             sections,
             toggleSection,
             logs,
+            customModal,
 
             // 助手管理（Tab1）
             list: assistant.list,

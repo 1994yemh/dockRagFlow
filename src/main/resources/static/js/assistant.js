@@ -9,7 +9,7 @@
  * @param {Function} addLog 日志记录函数
  * @returns {Object} 响应式状态和方法
  */
-function useAssistantModule(addLog) {
+function useAssistantModule(addLog, showModal) {
     const { ref, computed } = Vue;
 
     // ==========================================
@@ -244,23 +244,28 @@ function useAssistantModule(addLog) {
 
     /** 删除聊天助手（需要外部传入 session 相关的清理回调） */
     const deleteAssistant = async (id, onDeleted) => {
-        if (!confirm('您确定要彻底删除该聊天助手吗？此操作无法撤销。')) return;
-
-        try {
-            const result = await RagFlowAPI.deleteChatAssistant(id);
-            if (result.ok) {
-                addLog('SUCCESS', `DELETE (删除聊天助手)`, { id }, result.data);
-                alert('删除成功！');
-                if (onDeleted) onDeleted(id);
-                fetchList();
-            } else {
-                addLog('ERROR', `DELETE (删除聊天助手)`, { id }, result.data);
-                alert(`删除失败: ${result.data.message || '未知错误'}`);
+        showModal({
+            title: '彻底删除助手',
+            message: '您确定要彻底删除该聊天助手吗？此操作无法撤销，与其绑定的所有调试会话都会被一并清空。',
+            type: 'confirm',
+            onConfirm: async () => {
+                try {
+                    const result = await RagFlowAPI.deleteChatAssistant(id);
+                    if (result.ok) {
+                        addLog('SUCCESS', `DELETE (删除聊天助手)`, { id }, result.data);
+                        showModal({ title: '删除成功', message: '删除聊天助手成功！', type: 'alert' });
+                        if (onDeleted) onDeleted(id);
+                        fetchList();
+                    } else {
+                        addLog('ERROR', `DELETE (删除聊天助手)`, { id }, result.data);
+                        showModal({ title: '删除失败', message: '删除失败：' + (result.data.message || '未知错误'), type: 'alert' });
+                    }
+                } catch (e) {
+                    addLog('ERROR', `DELETE (删除聊天助手)`, { id }, { error: e.message });
+                    showModal({ title: '发生异常', message: '删除异常：' + e.message, type: 'alert' });
+                }
             }
-        } catch (e) {
-            addLog('ERROR', `DELETE (删除聊天助手)`, { id }, { error: e.message });
-            alert(`删除异常: ${e.message}`);
-        }
+        });
     };
 
     return {

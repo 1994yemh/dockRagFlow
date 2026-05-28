@@ -548,8 +548,7 @@
                                 <span>关联知识库: <strong class="text-slate-300 font-medium">{{ item.dataset_ids ?
                                         item.dataset_ids.length : 0 }} 个</strong></span>
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-850"></span>
-                                <span>温度: <strong class="text-slate-300 font-medium">{{ item.llm_setting ?
-                                        item.llm_setting.temperature : '0.1' }}</strong></span>
+                                <span>温度: <strong class="text-slate-300 font-medium">{{ (item.llm_setting && item.llm_setting.temperature !== undefined && item.llm_setting.temperature !== null) ? item.llm_setting.temperature : '0.1' }}</strong></span>
                             </div>
 
                             <div class="flex items-center gap-2 mt-2 border-t border-slate-800/60 pt-2.5">
@@ -811,8 +810,66 @@
                     动作将实时捕获并滚动呈现在此处</p>
             </div>
         </section>
+        <!-- Custom Luxury Glassmorphism Modal Component -->
+        <div v-if="customModal.show" 
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md transition-opacity duration-300 animate-fadeInFast">
+            
+            <!-- Modal Body Card -->
+            <div class="w-full max-w-md glass-card rounded-2xl border border-slate-700/50 shadow-2xl p-6 flex flex-col gap-5 relative overflow-hidden animate-zoomIn">
+                <!-- Glowing Accent Blur -->
+                <div class="absolute -top-20 -left-20 w-44 h-44 bg-indigo-600/10 rounded-full blur-3xl -z-10"></div>
+                <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-cyan-600/10 rounded-full blur-3xl -z-10"></div>
+
+                <!-- Modal Header -->
+                <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/35 flex items-center justify-center">
+                        <svg v-if="customModal.type === 'prompt'" class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        <svg v-else-if="customModal.type === 'confirm'" class="w-4.5 h-4.5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <svg v-else class="w-4.5 h-4.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-100 tracking-tight">{{ customModal.title }}</h3>
+                </div>
+
+                <!-- Modal Message Description -->
+                <div class="text-xs text-slate-300 leading-relaxed py-1">
+                    {{ customModal.message }}
+                </div>
+
+                <!-- Modal Input Field (Only shown in 'prompt' mode) -->
+                <div v-if="customModal.type === 'prompt'" class="w-full">
+                    <input type="text" 
+                        v-model="customModal.inputValue" 
+                        :placeholder="customModal.placeholder"
+                        @keyup.enter="customModal.onConfirm(customModal.inputValue)"
+                        class="w-full bg-slate-900/80 border border-slate-700 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all font-sans">
+                </div>
+
+                <!-- Modal Actions Footer Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-800/80">
+                    <button v-if="customModal.type !== 'alert'" 
+                        type="button" 
+                        @click="customModal.onCancel"
+                        class="px-4.5 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700/80 active:scale-95 transition-all text-slate-300 rounded-xl border border-slate-700/60">
+                        取消
+                    </button>
+                    <button type="button" 
+                        @click="customModal.onConfirm(customModal.inputValue)"
+                        :class="customModal.type === 'confirm' ? 'bg-gradient-to-r from-pink-500 to-rose-600 hover:shadow-pink-500/10' : 'bg-gradient-to-r from-indigo-500 to-indigo-600 hover:shadow-indigo-500/10'"
+                        class="px-5 py-2 text-xs font-semibold text-white rounded-xl hover:shadow-lg active:scale-95 transition-all">
+                        确定
+                    </button>
+                </div>
+            </div>
+        </div>
 
     </div>
+
 
     <!-- Script Application -->
     <!-- 引入拆分后的模块化 JS 逻辑脚本 -->
