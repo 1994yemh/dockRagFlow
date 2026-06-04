@@ -22,6 +22,8 @@ function useSessionModule(addLog, showModal) {
     const userInput = ref('');
     const chatTyping = ref(false);
     const chatBox = ref(null);
+    const activeReference = ref(null);      // 当前活跃引文对象
+    const activeMessageIndex = ref(null);    // 当前高亮选中的消息索引
 
     // 打字机缓冲队列与定时器状态（非响应式）
     let charQueue = [];
@@ -127,6 +129,10 @@ function useSessionModule(addLog, showModal) {
                     msgList = msgList.slice(1);
                 }
                 chatMessages.value = msgList;
+                // 自动拉取最后一条 assistant 消息的 reference 作为初始展示
+                const lastAssistantMsg = [...msgList].reverse().find(m => m.role === 'assistant');
+                activeReference.value = lastAssistantMsg?.reference || null;
+                activeMessageIndex.value = lastAssistantMsg ? msgList.indexOf(lastAssistantMsg) : null;
                 addLog('SUCCESS', `GET (获取会话详情)`, { chatId, sesId }, result.data);
                 scrollToBottom();
             } else {
@@ -254,6 +260,8 @@ function useSessionModule(addLog, showModal) {
         userInput.value = '';
 
         chatMessages.value.push({ role: 'user', content: text });
+        activeReference.value = null; // 发送消息，清空上轮引文
+        activeMessageIndex.value = null;
         scrollToBottom(false);
         chatTyping.value = true;
 
@@ -349,6 +357,16 @@ function useSessionModule(addLog, showModal) {
                                 if (obj && obj.text !== undefined) {
                                     textToken = obj.text;
                                 }
+                                // 流式提取引文数据，并动态关联至当前助理消息中
+                                if (obj && obj.reference !== undefined && obj.reference !== null) {
+                                    const currentMsg = chatMessages.value[chatMessages.value.length - 1];
+                                    if (currentMsg && currentMsg.role === 'assistant') {
+                                        currentMsg.reference = obj.reference;
+                                        // 激活右侧引用面板的实时展示
+                                        activeReference.value = obj.reference;
+                                        activeMessageIndex.value = chatMessages.value.length - 1;
+                                    }
+                                }
                             } catch (err) {
                                 textToken = jsonStr;
                             }
@@ -420,13 +438,22 @@ function useSessionModule(addLog, showModal) {
         }
     };
 
+    /** 选择并展示某条消息的引用来源 */
+    const selectMessageReference = (msg, index) => {
+        if (msg.role !== 'assistant') return;
+        activeMessageIndex.value = index;
+        activeReference.value = msg.reference || null;
+    };
+
     return {
         // 状态
         activeSandboxChat, activeSessionId, sessionList,
         chatMessages, userInput, chatTyping, chatBox,
+        activeReference, activeMessageIndex,
         // 方法
         switchToSessionTab, loadSessions, createNewSession,
         selectSession, renameSession, deleteSession, clearAllSessions,
-        sendMessage, scrollToBottom, renderMarkdown, onAssistantDeleted
+        sendMessage, scrollToBottom, renderMarkdown, onAssistantDeleted,
+        selectMessageReference
     };
 }

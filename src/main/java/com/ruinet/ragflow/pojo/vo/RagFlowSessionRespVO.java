@@ -62,5 +62,8 @@ public class RagFlowSessionRespVO implements Serializable {
 
         @Schema(description = "消息主键 ID")
         private String id;
+
+        @Schema(description = "引用来源详情数据")
+        private Object reference;
     }
 }

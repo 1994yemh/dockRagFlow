@@ -35,7 +35,7 @@
 </head>
 
 <body class="p-4 md:p-8 font-sans">
-    <div id="app" class="max-w-7xl mx-auto flex flex-col gap-6" v-cloak>
+    <div id="app" class="w-full max-w-[96%] 2xl:max-w-[1750px] 3xl:max-w-[1950px] mx-auto flex flex-col gap-6" v-cloak>
 
         <!-- Header -->
         <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
@@ -589,98 +589,98 @@
         </div>
 
         <!-- TAB 2: Conversation & Sessions Sandboxes Controls -->
-        <div v-show="activeTab === 'session'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div v-show="activeTab === 'session'" class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-            <!-- Left panel: Session list for specific Chat (4 Cols) -->
-            <div class="lg:col-span-4 flex flex-col gap-6">
+            <!-- Left panel: Session list for specific Chat (2 Cols) -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
 
                 <!-- Selected Assistant Info Box -->
-                <div class="glass-card p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
+                <div class="glass-card p-4 rounded-2xl flex flex-col gap-3 relative overflow-hidden text-xs">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -z-10"></div>
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-1.5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 flex-shrink-0">
+                        <h2 class="text-[11px] font-bold text-slate-300 flex items-center gap-1">
                             当前调试的目标助理
                         </h2>
                         <button @click="activeTab = 'assistant'"
-                            class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-0.5">
+                            class="text-[10px] text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-0.5">
                             切换助手
                         </button>
                     </div>
 
-                    <div v-if="activeSandboxChat" class="flex items-center gap-3">
+                    <div v-if="activeSandboxChat" class="flex items-center gap-2.5">
                         <div
-                            class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400 text-lg uppercase overflow-hidden flex-shrink-0">
+                            class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400 text-sm uppercase overflow-hidden flex-shrink-0">
                             <img v-if="activeSandboxChat.icon" :src="activeSandboxChat.icon"
                                 class="w-full h-full object-cover">
                             <span v-else>{{ activeSandboxChat.name.substring(0, 1) }}</span>
                         </div>
                         <div class="min-w-0 flex-1">
-                            <h3 class="font-bold text-sm text-slate-100 truncate">{{ activeSandboxChat.name }}</h3>
-                            <p class="text-[10px] text-indigo-400 font-mono tracking-tight mt-0.5 truncate">{{
+                            <h3 class="font-bold text-xs text-slate-100 truncate">{{ activeSandboxChat.name }}</h3>
+                            <p class="text-[9px] text-indigo-400 font-mono tracking-tight mt-0.5 truncate">{{
                                 activeSandboxChat.llm_id.split('@')[0] }}</p>
                         </div>
                     </div>
-                    <div v-else class="text-slate-500 text-xs italic text-center py-2">
-                        暂未选择目标助理，请先去 [聊天助手管理] 列表卡片上点击“调试沙盒”切入
+                    <div v-else class="text-slate-500 text-[10px] italic text-center py-2">
+                        暂未选择助理
                     </div>
                 </div>
 
                 <!-- Session list of specific Chat -->
                 <div v-if="activeSandboxChat"
-                    class="glass-card p-6 rounded-2xl flex flex-col gap-4 max-h-[420px] overflow-hidden">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-shrink-0">
-                        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2">
+                    class="glass-card p-4 rounded-2xl flex flex-col gap-3 max-h-[420px] overflow-hidden text-xs">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2 flex-shrink-0">
+                        <h2 class="text-[11px] font-bold text-slate-300">
                             历史会话列表
                         </h2>
                         <button @click="createNewSession"
-                            class="px-2.5 py-1 text-[10px] bg-indigo-600/90 hover:bg-indigo-500 rounded text-white font-bold transition-colors flex items-center gap-0.5">
+                            class="px-2 py-0.5 text-[9px] bg-indigo-600/90 hover:bg-indigo-500 rounded text-white font-bold transition-colors flex items-center gap-0.5">
                             + 新建会话
                         </button>
                     </div>
 
                     <!-- Session list cards -->
-                    <div class="flex flex-col gap-2.5 overflow-y-auto pr-1">
+                    <div class="flex flex-col gap-2 overflow-y-auto pr-1">
                         <div v-for="ses in sessionList" :key="ses.id"
                             :class="activeSessionId === ses.id ? 'border-indigo-500/80 bg-indigo-950/20' : 'border-slate-850 hover:bg-slate-900/30'"
-                            class="p-3 border rounded-xl flex items-center justify-between cursor-pointer transition-all">
-                            <div @click="selectSession(ses.id)" class="flex-1 min-w-0 pr-2">
-                                <h4 class="text-xs font-bold text-slate-200 truncate">{{ ses.name }}</h4>
-                                <span class="text-[9px] text-slate-500 font-mono block mt-0.5 truncate">{{ ses.id
+                            class="p-2 border rounded-lg flex items-center justify-between cursor-pointer transition-all">
+                            <div @click="selectSession(ses.id)" class="flex-1 min-w-0 pr-1.5">
+                                <h4 class="text-[11px] font-bold text-slate-200 truncate">{{ ses.name }}</h4>
+                                <span class="text-[8px] text-slate-500 font-mono block mt-0.5 truncate">{{ ses.id
                                     }}</span>
                             </div>
-                            <div class="flex items-center gap-2 flex-shrink-0">
+                            <div class="flex items-center gap-1.5 flex-shrink-0 text-[9px]">
                                 <button @click.stop="renameSession(ses)"
-                                    class="text-[10px] text-cyan-400 hover:text-cyan-300">重命名</button>
+                                    class="text-cyan-400 hover:text-cyan-300">重命名</button>
                                 <button @click.stop="deleteSession(ses.id)"
-                                    class="text-[10px] text-rose-500 hover:text-rose-400">删除</button>
+                                    class="text-rose-500 hover:text-rose-400">删除</button>
                             </div>
                         </div>
 
                         <!-- Empty Sessions -->
-                        <div v-if="sessionList.length === 0" class="text-center py-6 text-slate-500 text-xs italic">
+                        <div v-if="sessionList.length === 0" class="text-center py-4 text-slate-500 text-[10px] italic">
                             暂无会话。请点击上方“新建会话”开启全新对话。
                         </div>
                     </div>
 
                     <!-- Clear all sessions button -->
                     <button v-if="sessionList.length > 0" @click="clearAllSessions"
-                        class="w-full py-2 bg-rose-950/20 border border-rose-900/40 hover:bg-rose-950/40 text-rose-400 rounded-lg text-xs font-semibold transition-colors mt-auto">
+                        class="w-full py-1.5 bg-rose-950/20 border border-rose-900/40 hover:bg-rose-950/40 text-rose-400 rounded-md text-[10px] font-semibold transition-colors mt-auto">
                         一键清空该助手所有会话
                     </button>
                 </div>
             </div>
 
-            <!-- Right panel: Elegant Conversation sandbox window (8 Cols) -->
+            <!-- Middle panel: Elegant Conversation sandbox window (7 Cols) -->
             <div
-                class="lg:col-span-8 glass-card p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden h-[580px]">
+                class="lg:col-span-7 glass-card p-5 rounded-2xl flex flex-col gap-4 relative overflow-hidden h-[580px]">
                 <div class="absolute top-0 left-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl -z-10"></div>
 
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-shrink-0">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full"
                             :class="activeSessionId ? 'bg-emerald-500 animate-pulse' : 'bg-slate-700'"></span>
                         <h2 class="text-sm font-bold text-slate-100">
-                            {{ activeSessionId ? '对话调试沙盒 (活动会话模式)' : '对话调试沙盒 (待命模式)' }}
+                            {{ activeSessionId ? '对话调试沙盒' : '对话调试沙盒 (待命)' }}
                         </h2>
                     </div>
                 </div>
@@ -690,7 +690,7 @@
                     class="flex flex-col gap-4 flex-1 overflow-y-auto bg-slate-950/40 p-4 rounded-xl border border-slate-900 text-xs">
                     
                     <!-- Standard Greeting -->
-                    <div v-if="activeSandboxChat" class="flex items-start gap-3 max-w-[85%]">
+                    <div v-if="activeSandboxChat" class="flex items-start gap-3 max-w-[90%]">
                         <!-- 智能助理头像 (默认图标) -->
                         <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
                             <!-- 默认助理机器人 SVG -->
@@ -707,7 +707,7 @@
                     </div>
 
                     <!-- Loop Messages -->
-                    <div v-for="(msg, index) in chatMessages" :key="index" class="flex items-start gap-3 max-w-[85%]"
+                    <div v-for="(msg, index) in chatMessages" :key="index" class="flex items-start gap-3 max-w-[90%]"
                         :class="msg.role === 'user' ? 'ml-auto flex-row-reverse' : ''">
                         <!-- 头像渲染 -->
                         <!-- 用户消息使用该聊天助理的图标 -->
@@ -723,17 +723,37 @@
                             </svg>
                         </div>
 
-                        <!-- 消息气泡 -->
-                        <div class="p-3 rounded-2xl text-slate-200 border leading-relaxed flex-1 animate-fadeIn"
-                            :class="msg.role === 'user' ? 'bg-indigo-600 border-indigo-500 rounded-tr-none' : 'bg-slate-900/60 border-slate-800 rounded-tl-none'">
+                        <!-- 消息气泡（如果是助理回复且带引文支持手指点击） -->
+                        <div class="p-3 rounded-2xl text-slate-200 border leading-relaxed flex-1 animate-fadeIn transition-all"
+                            @click="selectMessageReference(msg, index)"
+                            :class="[
+                                msg.role === 'user' ? 'bg-indigo-600 border-indigo-500 rounded-tr-none' : 'bg-slate-900/60 border-slate-800 rounded-tl-none',
+                                msg.role === 'assistant' && msg.reference ? 'cursor-pointer hover:border-slate-700' : '',
+                                msg.role === 'assistant' && activeMessageIndex === index ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-slate-900/80 shadow-md' : ''
+                            ]">
                             <!-- 用户消息直接保留换行纯文本即可，助手消息则挂载 Markdown 豪华渲染器 -->
                             <p v-if="msg.role === 'user'" class="whitespace-pre-wrap">{{ msg.content }}</p>
                             <div v-else class="markdown-body" v-html="renderMarkdown(msg.content)"></div>
+
+                            <!-- 带引文的提示卡片组件 -->
+                            <div v-if="msg.role === 'assistant' && msg.reference" 
+                                class="mt-2 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-indigo-400 font-semibold select-none">
+                                <span class="flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                    包含 {{ msg.reference.chunks ? msg.reference.chunks.length : 0 }} 处参考片段
+                                </span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded border tracking-wide transition-all font-bold"
+                                    :class="activeMessageIndex === index ? 'bg-indigo-600 text-slate-100 border-indigo-500' : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'">
+                                    {{ activeMessageIndex === index ? '当前已选' : '点击查看' }}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Loader message -->
-                    <div v-if="chatTyping" class="flex items-start gap-3 max-w-[85%]">
+                    <div v-if="chatTyping" class="flex items-start gap-3 max-w-[90%]">
                         <!-- 助理默认头像 -->
                         <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
                             <svg class="w-4.5 h-4.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -762,15 +782,97 @@
                 </div>
 
                 <!-- Message Inputs -->
-                <form @submit.prevent="sendMessage" class="flex gap-2.5">
+                <form @submit.prevent="sendMessage" class="flex gap-2.5 flex-shrink-0">
                     <input type="text" v-model="userInput" :disabled="!activeSandboxChat" required
                         placeholder="向聊天助手提问问题 (RAG检索模式)..."
-                        class="flex-1 bg-slate-900/80 border border-slate-850 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-600 disabled:opacity-50">
+                        class="flex-1 bg-slate-900/80 border border-slate-850 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600 disabled:opacity-50">
                     <button type="submit" :disabled="!activeSandboxChat"
-                        class="px-5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 rounded-xl text-xs font-semibold active:scale-95 transition-all text-white flex items-center gap-1 disabled:opacity-50">
+                        class="px-5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 rounded-xl text-xs font-semibold active:scale-95 transition-all text-white flex items-center gap-1 disabled:opacity-50">
                         发送消息
                     </button>
                 </form>
+            </div>
+
+            <!-- Right panel: High Fidelity Knowledgebase Citations panel (3 Cols) -->
+            <div class="lg:col-span-3 glass-card p-5 rounded-2xl flex flex-col gap-4 relative overflow-hidden h-[580px]">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl -z-10"></div>
+                
+                <!-- Ultra clean compact header layout -->
+                <div class="border-b border-slate-800 pb-2.5 flex items-center justify-between flex-shrink-0">
+                    <div class="flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                        <h2 class="text-xs font-bold text-slate-100">知识库引用来源</h2>
+                    </div>
+                </div>
+
+                <!-- Citations Content Area -->
+                <div class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 text-xs">
+                    
+                    <!-- State: Empty citations placeholder (Matching the user's design) -->
+                    <div v-if="!activeReference || !activeReference.chunks || activeReference.chunks.length === 0"
+                        class="h-full flex flex-col items-center justify-center text-slate-500 gap-4 py-12 animate-fadeIn">
+                        <div class="w-16 h-16 rounded-full bg-slate-900/80 border border-slate-800 flex items-center justify-center relative overflow-hidden shadow-inner group">
+                            <!-- Elegant book SVG with glowing animation -->
+                            <div class="absolute inset-0 bg-indigo-500/5 blur-xl group-hover:bg-indigo-500/10 transition-colors"></div>
+                            <svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-500 text-center tracking-wide leading-relaxed max-w-[200px]">
+                            等待助教生成回答后展示引用来源
+                        </p>
+                    </div>
+
+                    <!-- State: Active citations list -->
+                    <div v-else class="flex flex-col gap-3.5 animate-fadeIn">
+                        <div class="text-[10px] text-slate-400 font-semibold flex items-center justify-between px-1 flex-shrink-0">
+                            <span>为您成功检索到以下文档切片：</span>
+                            <span class="px-2 py-0.5 rounded bg-indigo-950/40 text-indigo-400 border border-indigo-900/60 font-mono text-[9px] font-bold">
+                                共计 {{ activeReference.chunks.length }} 处
+                            </span>
+                        </div>
+
+                        <!-- Citations Cards -->
+                        <div v-for="(chunk, idx) in activeReference.chunks" :key="idx"
+                            class="p-4 bg-slate-900/40 border border-slate-850 hover:border-slate-800 rounded-2xl flex flex-col gap-2.5 transition-all hover:scale-[1.01] hover:shadow-lg hover:shadow-indigo-950/10 group relative overflow-hidden">
+                            <!-- Decorative accent bar -->
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500/80 rounded-l-2xl opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                            
+                            <!-- Citation Card Header -->
+                            <div class="flex items-center justify-between gap-3 pl-1.5 flex-shrink-0">
+                                <div class="flex items-center gap-1.5 min-w-0">
+                                    <svg class="w-3.5 h-3.5 text-indigo-400/80 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <span class="font-bold text-slate-200 truncate text-[11px]" :title="chunk.document_name">
+                                        {{ chunk.document_name }}
+                                    </span>
+                                </div>
+                                <div class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 tracking-wide flex-shrink-0 font-mono">
+                                    相似度: {{ (chunk.similarity * 100).toFixed(0) }}%
+                                </div>
+                            </div>
+
+                            <!-- Citation Card Content -->
+                            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-900 text-slate-300 leading-relaxed font-sans text-[11px] max-h-[140px] overflow-y-auto custom-mini-scrollbar relative">
+                                <p class="whitespace-pre-wrap select-text selection:bg-indigo-500/30">{{ chunk.content }}</p>
+                            </div>
+
+                            <!-- Citation Card Footer (Dataset Name) -->
+                            <div class="flex items-center justify-between text-[9px] text-slate-500 px-1 flex-shrink-0 font-mono">
+                                <span class="flex items-center gap-1 min-w-0">
+                                    <svg class="w-3 h-3 text-slate-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                                    </svg>
+                                    <span class="truncate font-bold text-slate-400">知识库: {{ findDatasetName(chunk.dataset_id) }}</span>
+                                </span>
+                                <span class="text-slate-600">ID: {{ chunk.id.substring(0,8) }}...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

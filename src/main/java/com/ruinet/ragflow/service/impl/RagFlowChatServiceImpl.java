@@ -897,8 +897,15 @@ public class RagFlowChatServiceImpl implements RagFlowChatService {
 
                                     if (StrUtil.isNotBlank(delta)) {
                                         // 将增量文本封装为 JSON 推送（与原有前端解析格式保持兼容）
-                                        java.util.Map<String, String> dataMap = new java.util.HashMap<>();
+                                        java.util.Map<String, Object> dataMap = new java.util.HashMap<>();
                                         dataMap.put("text", delta);
+                                        
+                                        // 提取大模型返回的引用（reference）信息原样下发，用以渲染问答引用溯源面板
+                                        JsonNode referenceNode = dataNode.path("reference");
+                                        if (referenceNode != null && !referenceNode.isMissingNode() && !referenceNode.isNull()) {
+                                            dataMap.put("reference", referenceNode);
+                                        }
+                                        
                                         String json = objectMapper.writeValueAsString(dataMap);
 
                                         System.out.print(delta);

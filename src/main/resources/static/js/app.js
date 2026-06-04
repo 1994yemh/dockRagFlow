@@ -100,6 +100,13 @@ createApp({
             sections.value.retrieval = true;
         };
 
+        /** 根据知识库 ID 寻找其真实名称 */
+        const findDatasetName = (datasetId) => {
+            if (!datasetId) return '未知知识库';
+            const ds = assistant.datasetList.value.find(d => d.id === datasetId);
+            return ds ? ds.name : '关联知识库';
+        };
+
         // ==========================================
         //  初始化加载
         // ==========================================
@@ -116,6 +123,7 @@ createApp({
             toggleSection,
             logs,
             customModal,
+            findDatasetName,
 
             // 助手管理（Tab1）
             list: assistant.list,
@@ -143,6 +151,8 @@ createApp({
             userInput: session.userInput,
             chatTyping: session.chatTyping,
             chatBox: session.chatBox,
+            activeReference: session.activeReference,
+            activeMessageIndex: session.activeMessageIndex,
             switchToSessionTab,
             createNewSession: session.createNewSession,
             selectSession: session.selectSession,
@@ -150,7 +160,8 @@ createApp({
             deleteSession: session.deleteSession,
             clearAllSessions: session.clearAllSessions,
             sendMessage: session.sendMessage,
-            renderMarkdown: session.renderMarkdown
+            renderMarkdown: session.renderMarkdown,
+            selectMessageReference: session.selectMessageReference
         };
     }
 }).mount('#app');
